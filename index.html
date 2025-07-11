@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>SecureBank – Simulador CSRF</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body{background:linear-gradient(145deg,#00243f 0%,#0e3b66 100%);min-height:100vh;color:#182026;}
+    .card{box-shadow:0 4px 12px rgba(0,0,0,.25);}  
+    .codebox{background:#112b3c;color:#00e676;font-family:monospace;font-size:.82rem;padding:.75rem;border-radius:.35rem;white-space:pre-wrap;min-height:90px;}
+    .bubble{max-width:75%;padding:.45rem .8rem;border-radius:.85rem;margin-bottom:.35rem;font-size:.9rem;}
+    .left-bub{background:#fff;border:1px solid #dee2e6;}
+    .right-bub{background:#dcf8c6;margin-left:auto;}
+    footer{font-size:.8rem;color:#f8f9fa;text-align:center;margin-top:1.5rem;}
+  </style>
+</head>
+<body>
+<div class="container py-3">
+  <div class="bg-light rounded-3 text-center p-3 mb-4 shadow-sm">
+    <h3 class="m-0 fw-bold text-primary"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-shield-lock me-1" viewBox="0 0 16 16"><path d="M5.5 9a1.5 1.5 0 0 0 3 0V8h1a1 1 0 0 0 1-1V6.256a1 1 0 0 0-.553-.894l-4-2A1 1 0 0 0 5 4.256V5h1v-.644l3 1.5V7H4V5.952l.5-.25V8a1 1 0 0 0 1 1h1v.5ZM8 0c-.69 0-1.141.246-1.618.39C5.029.734 3.667 1.27 2.342 1.929c-.511.25-.995.525-1.427.787C.6 3.088 0 3.635 0 4.292v4.655c0 4.21 3.4 6.708 7.246 7.983.215.07.445.07.66 0C12.6 15.655 16 13.157 16 8.947V4.292c0-.657-.6-1.204-1.015-1.576-.432-.262-.916-.537-1.427-.787C12.333 1.27 10.971.734 9.618.39 9.141.246 8.69 0 8 0Z"/></svg>SecureBank – Simulador CSRF</h3>
+    <small class="text-muted">Laboratorio interactivo para entender y prevenir ataques Cross‑Site Request Forgery (CSRF)</small>
+  </div>
+
+  <div class="row g-4">
+    <!-- Usuario -->
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+          <span class="fw-semibold"><i class="bi bi-person-fill me-1"></i>Vista del Usuario</span>
+          <span class="badge bg-success">Sesión activa</span>
+        </div>
+        <div class="card-body">
+          <div class="mb-3 p-3 bg-primary text-white rounded">
+            <h6 class="mb-1">Saldo Disponible</h6>
+            <h3 id="balanceText" class="fw-bold mb-0">€5.000,00</h3>
+            <small>Cuenta: ES76 2100 0418 4502 0005 1332</small>
+          </div>
+
+          <h6>Realizar transferencia</h6>
+          <div class="mb-2"><input id="to" class="form-control" placeholder="ES99 9999 9999 9999" value="ES99 9999 9999 9999"/></div>
+          <div class="mb-2"><input id="amount" type="number" min="1" class="form-control" value="100"/></div>
+          <button id="transferBtn" class="btn btn-primary w-100 mb-3"><i class="bi bi-send me-1"></i>Transferir</button>
+          <div id="transferMsg" class="small mb-3 text-center"></div>
+
+          <h6>Historial de transferencias</h6>
+          <table class="table table-sm" id="history">
+            <thead class="table-light"><tr><th>Fecha</th><th>Destinatario</th><th>Monto</th><th>Estado</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Atacante -->
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-header bg-white fw-semibold"><i class="bi bi-bug-fill me-1 text-danger"></i>Vista del Atacante</div>
+        <div class="card-body">
+          <div class="alert alert-info py-2"><strong>¿Qué es CSRF?</strong><br/>CSRF (Cross‑Site Request Forgery) es un ataque que engaña al navegador de un usuario para que ejecute acciones no deseadas en una aplicación donde está autenticado.</div>
+
+          <h6>Solicitud capturada</h6>
+          <div id="captureBox" class="codebox mb-3">Esperando transferencia del usuario…</div>
+          <button id="sendAttack" class="btn btn-danger w-100 mb-3"><i class="bi bi-exclamation-triangle me-1"></i>Generar y enviar ataque</button>
+          <button id="explainBtn" class="btn btn-secondary w-100 mb-3" style="display:none;"><i class="bi bi-question-circle me-1"></i>¿Qué sucedió?</button>
+
+          <div class="alert alert-info py-2"><strong>¿Cómo funciona el exploit?</strong><br/>El atacante crea una página HTML maliciosa con un formulario oculto que replica la solicitud de transferencia. Cuando la víctima visita esa página con su sesión activa, la transferencia se ejecuta automáticamente.</div>
+
+          <h6>PoC generada</h6>
+          <div id="pocBox" class="codebox">// El exploit se mostrará aquí tras capturar una solicitud</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chat -->
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header bg-white fw-semibold"><i class="bi bi-chat-dots-fill me-1"></i>Chat SeguroBank</div>
+        <div class="card-body" style="min-height:180px;max-height:280px;overflow-y:auto;" id="msgs"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer>Simulador Educativo de CSRF — SecureBank © 2025 | Este sitio es una simulación para fines educativos</footer>
+</div>
+
+<!-- Modal explicación -->
+<div class="modal fade" id="explainModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-eye"></i> ¿Qué sucedió?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p class="mb-2"><strong>Paso a paso del ataque CSRF</strong></p>
+        <ol>
+          <li>El usuario inicia sesión y posee una <em>cookie</em> de sesión válida.</li>
+          <li>Realiza una transferencia legítima ➡️ la solicitud completa aparece en el panel del atacante.</li>
+          <li>El atacante genera un formulario oculto con esos mismos parámetros.</li>
+          <li>Engaña al usuario con un enlace en el chat.</li>
+          <li>El navegador del usuario envía la <span class="text-danger">solicitud forjada</span> automáticamente porque la cookie se envía junto con el dominio bancario.</li>
+          <li>El servidor no distingue entre una acción intencional y la forjada, por lo que procesa la transferencia.</li>
+        </ol>
+        <p class="mt-3"><strong>Diagrama rápido</strong></p>
+        <pre class="codebox">Víctima 🧑‍💻  ──(1 Transferencia)──▶ Banco 🏦
+                        ▲
+Atacante 😈 ─(2 Captura)─┘
+Atacante 😈 ─(3 Link)──▶ Víctima 🧑‍💻─(4 Solicitud forjada)─▶ Banco 🏦</pre>
+        <p class="mt-3"><strong>Mitigaciones imprescindibles</strong></p>
+        <ul>
+          <li>Tokens CSRF únicos y verificables en cada formulario.</li>
+          <li>Cookies con atributo <code>SameSite=Strict</code>.</li>
+          <li>Verificar cabeceras <code>Origin</code> / <code>Referer</code>.</li>
+          <li>Requerir doble factor o confirmación adicional en operaciones críticas.</li>
+        </ul>
+      </div>
+      <div class="modal-footer"><button type="button" class="btn btn-primary" data-bs-dismiss="modal">Entendido</button></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// ------- Estado y utilidades -------
+let balance=5000;
+const balanceText=document.getElementById('balanceText');
+const historyBody=document.querySelector('#history tbody');
+const captureBox=document.getElementById('captureBox');
+const pocBox=document.getElementById('pocBox');
+const msgs=document.getElementById('msgs');
+const transferMsg=document.getElementById('transferMsg');
+const explainBtn=document.getElementById('explainBtn');
+let captured=null;
+function euro(n){return `€${n.toLocaleString('es-ES',{minimumFractionDigits:2})}`;}
+function addBubble(text,right=false){const div=document.createElement('div');div.className=`bubble ${right?'right-bub':'left-bub'}`;div.innerHTML=text;msgs.append(div);msgs.scrollTop=msgs.scrollHeight;}
+function logTransfer(to,amount,csrf=false){const tr=document.createElement('tr');tr.innerHTML=`<td>${new Date().toLocaleDateString()}</td><td>${to}</td><td>${euro(amount)}</td><td>${csrf?'<span class="badge bg-danger">CSRF</span>':'<span class="badge bg-success">OK</span>'}</td>`;historyBody.prepend(tr);}
+
+// ------- Transferencia legítima -------
+transferBtn.addEventListener('click',()=>{
+  const to=document.getElementById('to').value.trim();
+  const amt=parseFloat(document.getElementById('amount').value);
+  if(!to||!amt||amt<=0){alert('Completa los campos');return;}
+  if(amt>balance){alert('Saldo insuficiente');return;}
+  const prev=balance;balance-=amt;balanceText.textContent=euro(balance);
+  transferMsg.textContent=`Saldo anterior: ${euro(prev)} | Saldo actual: ${euro(balance)}`;
+  setTimeout(()=>transferMsg.textContent='',6000);
+  logTransfer(to,amt);
+  // construir solicitud estilo BurpSuite
+  captured=`POST /transfer HTTP/1.1
+Host: www.securebank.com
+Content-Type: application/x-www-form-urlencoded
+Cookie: session_id=user123456
+
+recipient=${encodeURIComponent(to)}&amount=${amt}`;
+  captureBox.textContent=captured;
+  pocBox.textContent=`<form action='https://www.securebank.com/transfer' method='POST'>
+ <input name='recipient' value='${to}'>
+ <input name='amount' value='${amt}'>
+</form>`;
+  addBubble('✅ Usuario realizó una transferencia.',true);
+});
+
+// ------- Ataque CSRF -------
+function csrfAttack(e){e.preventDefault();
+  const prev=balance;const amt=1500;balance-=amt;balanceText.textContent=euro(balance);
+  logTransfer('ES66 6666 6666 6666',amt,true);
+  addBubble('😈 Transferencia CSRF ejecutada. Revisa tu saldo.');
+  addBubble('😱 ¡Mi dinero! Voy a revisar el saldo…',true);
+  transferMsg.textContent=`Saldo anterior: ${euro(prev)} | Saldo actual: ${euro(balance)}`;
+  setTimeout(()=>transferMsg.textContent='',8000);
+  explainBtn.style.display='block';
+}
+
+sendAttack.addEventListener('click',()=>{
+  if(!captured){alert('Aún no hay solicitud capturada');return;}
+  const phishing="Hola, soy del departamento de seguridad. Hemos detectado actividad inusual en tu cuenta. <a href='#' id='phish'>Haz clic aquí para verificar</a>";
+  addBubble(phishing);
+  setTimeout(()=>{const l=document.getElementById('phish');if(l)l.addEventListener('click',csrfAttack);},0);
+});
+
+// ------- Mostrar explicación -------
+explainBtn.addEventListener('click',()=>{
+  const modal=new bootstrap.Modal(document.getElementById('explainModal'));
+  modal.show();
+});
+</script>
