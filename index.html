@@ -5,95 +5,348 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>SecureBank – Simulador CSRF</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
   <style>
-    body{background:linear-gradient(145deg,#00243f 0%,#0e3b66 100%);min-height:100vh;color:#182026;}
-    .card{box-shadow:0 4px 12px rgba(0,0,0,.25);}  
-    .codebox{background:#112b3c;color:#00e676;font-family:monospace;font-size:.82rem;padding:.75rem;border-radius:.35rem;white-space:pre-wrap;min-height:90px;}
-    .bubble{max-width:75%;padding:.45rem .8rem;border-radius:.85rem;margin-bottom:.35rem;font-size:.9rem;}
-    .left-bub{background:#fff;border:1px solid #dee2e6;}
-    .right-bub{background:#dcf8c6;margin-left:auto;}
-    footer{font-size:.8rem;color:#f8f9fa;text-align:center;margin-top:1.5rem;}
+    body{background:linear-gradient(135deg,#0a0a0a 0%,#1a1a1a 50%,#2a2a2a 100%);min-height:100vh;color:#ffffff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;margin:0;padding:0;}
+    .main-header{background:#1f1f1f;box-shadow:0 4px 20px rgba(0,0,0,.5);padding:1.5rem 0;margin-bottom:1.5rem;border-bottom:1px solid #404040;width:100%;}
+    .card{background:#1f1f1f;box-shadow:0 8px 32px rgba(0,0,0,.6);border:1px solid #404040;border-radius:.75rem;overflow:hidden;width:100%;min-height:450px;}
+    .card-header{font-weight:600;padding:1rem 1.5rem;border-bottom:1px solid #404040;color:#ffffff;}
+    .user-card .card-header{background:#2563eb;color:white;}
+    .attacker-card .card-header{background:#dc2626;color:white;}
+    .chat-card .card-header{background:#128c7e;color:white;}
+    
+    /* Mejorar el diseño de las columnas */
+    .main-container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    @media (min-width: 1600px) {
+      .main-container {
+        max-width: 1200px;
+      }
+    }
+    
+    @media (min-width: 992px) {
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: stretch;
+      }
+      .col-12.col-lg-4 {
+        flex: 0 0 33.333333%;
+        max-width: 33.333333%;
+      }
+      .card {
+        height: 100%;
+        min-height: 500px;
+      }
+    }
+    
+    @media (min-width: 1200px) {
+      .card {
+        min-height: 600px;
+      }
+    }
+    
+    @media (max-width: 991px) {
+      .col-12 {
+        margin-bottom: 1rem;
+      }
+      .card {
+        min-height: auto;
+      }
+    }
+    .balance-box{background:linear-gradient(135deg,#2563eb 0%,#1d4ed8 100%);border-radius:.75rem;padding:1.25rem;color:white;text-align:center;margin-bottom:1.25rem;box-shadow:0 4px 20px rgba(37,99,235,.4);width:100%;}
+    .balance-amount{font-size:2.2rem;font-weight:800;margin:.5rem 0;text-shadow:0 2px 4px rgba(0,0,0,.4);}
+    @media (max-width: 768px) {
+      .balance-amount{font-size:2.5rem;}
+      .balance-box{padding:1.5rem;}
+      .form-section{padding:1rem;}
+      .card-header{padding:0.75rem 1rem;}
+      .info-box{padding:1rem;margin-bottom:1rem;}
+      .codebox{padding:1rem;font-size:0.9rem;}
+    }
+    @media (max-width: 576px) {
+      .balance-amount{font-size:2rem;}
+      .balance-box{padding:1rem;}
+      .container-custom{padding:0 0.5rem;}
+      .form-section{padding:0.75rem;}
+      .card-body{padding:1rem;}
+      .btn{font-size:0.9rem;padding:0.75rem 1rem;}
+      .bubble{font-size:0.9rem;padding:0.75rem 1rem;}
+      .chat-container{padding:1rem;flex:1;}
+      .chat-card{display:flex;flex-direction:column;}
+      .chat-card .card-body{flex:1;display:flex;flex-direction:column;}
+    }
+    @media (max-width: 480px) {
+      .balance-amount{font-size:1.75rem;}
+      .balance-box{padding:0.75rem;}
+      .form-section{padding:0.5rem;}
+      .card-header{padding:0.5rem 0.75rem;font-size:0.9rem;}
+      .btn{font-size:0.85rem;padding:0.6rem 0.8rem;}
+      .bubble{font-size:0.85rem;padding:0.6rem 0.8rem;}
+      .chat-container{flex:1;}
+      .chat-card{display:flex;flex-direction:column;}
+      .chat-card .card-body{flex:1;display:flex;flex-direction:column;}
+      .main-header{padding:1rem 0;}
+      .main-header h1{font-size:1.75rem;}
+      .main-header p{font-size:1rem;}
+    }
+    
+    /* Ajustes específicos para el layout de 3 columnas */
+    @media (min-width: 1400px) {
+      .container-custom{max-width:1400px;}
+      .chat-container{flex:1;}
+      .chat-card{display:flex;flex-direction:column;}
+      .chat-card .card-body{flex:1;display:flex;flex-direction:column;}
+    }
+    @media (min-width: 1200px) {
+      .container-custom{max-width:1200px;}
+      .chat-container{flex:1;}
+      .chat-card{display:flex;flex-direction:column;}
+      .chat-card .card-body{flex:1;display:flex;flex-direction:column;}
+    }
+    @media (min-width: 992px) and (max-width: 1199px) {
+      .chat-container{flex:1;}
+      .chat-card{display:flex;flex-direction:column;}
+      .chat-card .card-body{flex:1;display:flex;flex-direction:column;}
+    }
+    .account-info{opacity:.95;font-size:.95rem;margin-top:.5rem;}
+    .form-section{background:#2a2a2a;padding:1rem;border-radius:.75rem;margin-bottom:1rem;border:1px solid #404040;}
+    .form-section h6{color:#ffffff;margin-bottom:1rem;font-weight:600;font-size:1rem;}
+    .form-label{font-weight:500;color:#e5e5e5;margin-bottom:.4rem;font-size:.95rem;}
+    .form-control{background:#1a1a1a;border:1px solid #555555;border-radius:.5rem;padding:.65rem .9rem;font-size:.9rem;transition:all .2s;color:#ffffff;}
+    .form-control:focus{background:#1a1a1a;border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.3);color:#ffffff;}
+    .form-control::placeholder{color:#999999;}
+    .btn-transfer{background:linear-gradient(135deg,#2563eb 0%,#1d4ed8 100%);border:none;padding:.75rem 1.25rem;font-weight:600;border-radius:.5rem;font-size:.95rem;transition:all .2s;color:white;}
+    .btn-transfer:hover{background:linear-gradient(135deg,#1d4ed8 0%,#2563eb 100%);transform:translateY(-1px);box-shadow:0 4px 20px rgba(37,99,235,.5);color:white;}
+    .btn-attack{background:linear-gradient(135deg,#dc2626 0%,#ef4444 100%);border:none;padding:.75rem 1.25rem;font-weight:600;border-radius:.5rem;font-size:.95rem;transition:all .2s;color:white;}
+    .btn-attack:hover{background:linear-gradient(135deg,#ef4444 0%,#f87171 100%);transform:translateY(-1px);box-shadow:0 4px 20px rgba(220,38,38,.5);color:white;}
+    .btn-secondary{background:linear-gradient(135deg,#6b7280 0%,#9ca3af 100%);border:none;padding:.75rem 1.25rem;font-weight:600;border-radius:.5rem;font-size:.95rem;transition:all .2s;color:white;}
+    .btn-secondary:hover{background:linear-gradient(135deg,#9ca3af 0%,#d1d5db 100%);transform:translateY(-1px);color:#1f1f1f;}
+    .codebox{background:#0a0a0a;color:#00ff88;font-family:'Fira Code',Monaco,Consolas,monospace;font-size:.85rem;padding:1rem;border-radius:.5rem;white-space:pre-wrap;min-height:80px;border:1px solid #404040;box-shadow:inset 0 2px 4px rgba(0,0,0,.4);overflow-x:auto;word-break:break-all;}
+    .codebox-green{color:#00ff88;}
+    .info-box{background:#1a1a1a;border:1px solid #2563eb;border-left:4px solid #3b82f6;padding:1rem;margin-bottom:1rem;border-radius:.5rem;font-size:.9rem;}
+    .info-box strong{color:#60a5fa;}
+    .info-box{color:#e5e5e5;}
+    .bubble{max-width:80%;padding:1rem 1.25rem;border-radius:18px;margin-bottom:.75rem;font-size:.95rem;word-wrap:break-word;line-height:1.4;position:relative;}
+    .left-bub{background:#ffffff;border:none;box-shadow:0 2px 8px rgba(0,0,0,.15);color:#1f1f1f;margin-right:auto;}
+    .right-bub{background:#dcf8c6;margin-left:auto;border:none;box-shadow:0 2px 8px rgba(0,0,0,.15);color:#1f1f1f;}
+    .system-bub{background:#e3f2fd;border:1px solid #2196f3;color:#0d47a1;margin:0 auto;max-width:95%;font-size:.9rem;border-radius:12px;text-align:center;}
+    .app-bub{background:#f3e5f5;border:1px solid #9c27b0;color:#4a148c;margin:0 auto;max-width:95%;font-size:.9rem;border-radius:12px;text-align:center;font-style:italic;}
+    .left-bub::before{content:'';position:absolute;top:0;left:-8px;width:0;height:0;border-top:8px solid transparent;border-right:8px solid #ffffff;border-bottom:8px solid transparent;}
+    .right-bub::before{content:'';position:absolute;top:0;right:-8px;width:0;height:0;border-top:8px solid transparent;border-left:8px solid #dcf8c6;border-bottom:8px solid transparent;}
+    .chat-container{background:#e5ddd5;border-radius:.75rem;padding:1rem;overflow-y:auto;border:1px solid #404040;background-image:url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="chat-pattern" patternUnits="userSpaceOnUse" width="50" height="50"><circle cx="25" cy="25" r="1" fill="%23ffffff" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23chat-pattern)"/></svg>');flex:1;max-height:calc(100vh - 350px);}
+    .chat-card{overflow:hidden;min-height:auto;display:flex;flex-direction:column;}
+    .chat-card .card-body{flex:1;display:flex;flex-direction:column;}
+    
+    /* Ajustar la altura del chat según el tamaño de pantalla */
+    @media (min-width: 1200px) {
+      .chat-container{flex:1;max-height:calc(100vh - 300px);}
+      .chat-card{display:flex;flex-direction:column;}
+      .chat-card .card-body{flex:1;display:flex;flex-direction:column;}
+      .card{min-height:550px;}
+      .balance-amount{font-size:2.4rem;}
+      .info-box{font-size:.95rem;}
+      .codebox{font-size:.9rem;}
+    }
+    @media (min-width: 992px) and (max-width: 1199px) {
+      .chat-container{flex:1;max-height:calc(100vh - 320px);}
+      .chat-card{display:flex;flex-direction:column;}
+      .chat-card .card-body{flex:1;display:flex;flex-direction:column;}
+    }
+    @media (max-width: 991px) {
+      .chat-container{flex:1;max-height:calc(100vh - 350px);}
+      .chat-card{display:flex;flex-direction:column;}
+      .chat-card .card-body{flex:1;display:flex;flex-direction:column;}
+      .card{min-height:auto;}
+    }
+    .history-table{font-size:.8rem;margin-bottom:0;color:#ffffff;}
+    .history-table th{background:#0f172a;border-bottom:2px solid #475569;font-weight:600;color:#f1f5f9;padding:.75rem .5rem;font-size:.75rem;}
+    .history-table td{padding:.65rem .5rem;border-bottom:1px solid #475569;color:#f1f5f9;background:#1e293b;font-size:.75rem;}
+    .history-table tbody tr:hover{background:#334155;}
+    .status-badge{font-size:.8rem;padding:.35rem .75rem;border-radius:.375rem;font-weight:500;}
+    .transfer-msg{background:#1a1a1a;border:1px solid #22c55e;color:#22c55e;padding:1rem;border-radius:.5rem;text-align:center;margin:1rem 0;font-weight:500;}
+    .session-badge{background:#22c55e;color:white;font-size:.8rem;padding:.4rem .8rem;border-radius:.375rem;font-weight:500;}
+    .modal-content{background:#1f1f1f;border:1px solid #404040;color:#ffffff;}
+    .modal-header{background:#1a1a1a;border-bottom:1px solid #404040;padding:1.5rem;color:#ffffff;}
+    .modal-body{line-height:1.6;padding:1.5rem;color:#e5e5e5;}
+    .modal-body pre{background:#0a0a0a;color:#00ff88;padding:1.25rem;border-radius:.5rem;font-size:.9rem;border:1px solid #404040;}
+    .modal-body code{background:#1a1a1a;color:#ff6b6b;padding:.25rem .5rem;border-radius:.25rem;font-size:.9rem;font-weight:500;border:1px solid #404040;}
+    .modal-body ol{padding-left:1.5rem;}
+    .modal-body li{margin-bottom:.5rem;}
+    footer{font-size:.85rem;color:#cccccc;text-align:center;margin-top:3rem;opacity:.8;}
+    .table-responsive{border-radius:.5rem;overflow:hidden;}
+    .alert-info{background:#1a1a1a;border:1px solid #2563eb;color:#60a5fa;border-radius:.5rem;}
+    .container-custom{max-width:100%;margin:0 auto;padding:0 1rem;width:100%;}
+    @media (min-width: 1400px) {
+      .container-custom{max-width:1400px;padding:0 2rem;}
+    }
+    @media (min-width: 1200px) {
+      .container-custom{max-width:1200px;padding:0 1.5rem;}
+    }
+    @media (min-width: 992px) {
+      .container-custom{max-width:100%;padding:0 1rem;}
+    }
+    @media (min-width: 768px) {
+      .container-custom{max-width:100%;padding:0 1rem;}
+    }
+    @media (min-width: 576px) {
+      .container-custom{max-width:100%;padding:0 1rem;}
+    }
+    @media (max-width: 575px) {
+      .container-custom{padding:0 0.5rem;}
+    }
+    .text-primary{color:#60a5fa!important;}
+    .text-muted{color:#cccccc!important;}
+    .btn-close{filter:invert(1) brightness(2);}
+    .btn-primary{background:#2563eb;border-color:#2563eb;color:white;}
+    .btn-primary:hover{background:#1d4ed8;border-color:#1d4ed8;color:white;}
+    .text-danger{color:#ff6b6b!important;}
+    .card-body{color:#e5e5e5;padding:1rem;}
+    h1, h2, h3, h4, h5, h6{color:#ffffff;}
+    .left-bub::after{content:'';position:absolute;bottom:3px;left:-8px;width:0;height:0;border-left:8px solid transparent;border-right:8px solid #ffffff;border-top:8px solid #ffffff;border-bottom:8px solid transparent;}
+    .right-bub::after{content:'';position:absolute;bottom:3px;right:-8px;width:0;height:0;border-left:8px solid #dcf8c6;border-right:8px solid transparent;border-top:8px solid #dcf8c6;border-bottom:8px solid transparent;}
+    .chat-time{font-size:.75rem;color:#666666;margin-top:.25rem;text-align:right;}
+    .amount-input{background:#1a1a1a;border:1px solid #dc2626;border-radius:.5rem;padding:.5rem .75rem;color:#ffffff;margin:.5rem 0;width:150px;}
+    .amount-input:focus{border-color:#ef4444;outline:none;box-shadow:0 0 0 2px rgba(239,68,68,.2);}
   </style>
 </head>
 <body>
-<div class="container py-3">
-  <div class="bg-light rounded-3 text-center p-3 mb-4 shadow-sm">
-    <h3 class="m-0 fw-bold text-primary"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-shield-lock me-1" viewBox="0 0 16 16"><path d="M5.5 9a1.5 1.5 0 0 0 3 0V8h1a1 1 0 0 0 1-1V6.256a1 1 0 0 0-.553-.894l-4-2A1 1 0 0 0 5 4.256V5h1v-.644l3 1.5V7H4V5.952l.5-.25V8a1 1 0 0 0 1 1h1v.5ZM8 0c-.69 0-1.141.246-1.618.39C5.029.734 3.667 1.27 2.342 1.929c-.511.25-.995.525-1.427.787C.6 3.088 0 3.635 0 4.292v4.655c0 4.21 3.4 6.708 7.246 7.983.215.07.445.07.66 0C12.6 15.655 16 13.157 16 8.947V4.292c0-.657-.6-1.204-1.015-1.576-.432-.262-.916-.537-1.427-.787C12.333 1.27 10.971.734 9.618.39 9.141.246 8.69 0 8 0Z"/></svg>SecureBank – Simulador CSRF</h3>
-    <small class="text-muted">Laboratorio interactivo para entender y prevenir ataques Cross‑Site Request Forgery (CSRF)</small>
+<div class="main-header">
+  <div class="container-fluid">
+    <div class="text-center">
+      <h1 class="mb-2 fw-bold text-primary">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-shield-lock me-2" viewBox="0 0 16 16">
+          <path d="M5.338 1.59a61.44 61.44 0 0 0-2.837.856.481.481 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.725 10.725 0 0 0 2.287 2.233c.346.244.652.42.893.533.12.057.218.095.293.118a.55.55 0 0 0 .101.025.615.615 0 0 0 .1-.025c.076-.023.174-.061.294-.118.24-.113.547-.29.893-.533a10.726 10.726 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.775 11.775 0 0 1-2.517 2.453 7.159 7.159 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7.158 7.158 0 0 1-1.048-.625 11.777 11.777 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 62.456 62.456 0 0 1 5.072.56z"/>
+          <path d="M9.5 6.5a1.5 1.5 0 0 1-1 1.415l.385 1.99a.5.5 0 0 1-.491.595h-.788a.5.5 0 0 1-.49-.595L7.5 7.915A1.5 1.5 0 1 1 9.5 6.5z"/>
+        </svg>
+        SecureBank - Simulador CSRF
+      </h1>
+      <p class="text-muted mb-0 fs-5">Laboratorio interactivo para entender y prevenir ataques Cross-Site Request Forgery (CSRF)</p>
+    </div>
   </div>
+</div>
 
-  <div class="row g-4">
-    <!-- Usuario -->
-    <div class="col-md-6">
-      <div class="card h-100">
-        <div class="card-header bg-white d-flex justify-content-between align-items-center">
-          <span class="fw-semibold"><i class="bi bi-person-fill me-1"></i>Vista del Usuario</span>
-          <span class="badge bg-success">Sesión activa</span>
+<div class="container-fluid px-3">
+  <div class="main-container">
+    <div class="row g-3 justify-content-center">
+      <!-- Usuario -->
+      <div class="col-12 col-lg-4 col-xl-4 mb-3">
+        <div class="card h-100 user-card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <span><i class="bi bi-person-fill me-2"></i>Vista del Usuario</span>
+          <span class="session-badge">Sesión activa</span>
         </div>
         <div class="card-body">
-          <div class="mb-3 p-3 bg-primary text-white rounded">
-            <h6 class="mb-1">Saldo Disponible</h6>
-            <h3 id="balanceText" class="fw-bold mb-0">€5.000,00</h3>
-            <small>Cuenta: ES76 2100 0418 4502 0005 1332</small>
+          <div class="balance-box">
+            <div class="small mb-2">Saldo Disponible</div>
+            <div id="balanceText" class="balance-amount">$5,000.00</div>
+            <div class="account-info">Cuenta: **** **** **** 4321</div>
           </div>
 
-          <h6>Realizar transferencia</h6>
-          <div class="mb-2"><input id="to" class="form-control" placeholder="ES99 9999 9999 9999" value="ES99 9999 9999 9999"/></div>
-          <div class="mb-2"><input id="amount" type="number" min="1" class="form-control" value="100"/></div>
-          <button id="transferBtn" class="btn btn-primary w-100 mb-3"><i class="bi bi-send me-1"></i>Transferir</button>
-          <div id="transferMsg" class="small mb-3 text-center"></div>
+          <div class="form-section">
+            <h6><i class="bi bi-arrow-right-circle me-2"></i>Realizar transferencia</h6>
+            <div class="mb-3">
+              <label class="form-label">Cuenta destino</label>
+              <input id="to" class="form-control" placeholder="4000-1234-5678-9999" value="4000-1234-5678-9999"/>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Cantidad ($)</label>
+              <input id="amount" type="number" min="1" class="form-control" value="100"/>
+            </div>
+            <button id="transferBtn" class="btn btn-transfer w-100">
+              <i class="bi bi-send me-2"></i>Transferir
+            </button>
+          </div>
 
-          <h6>Historial de transferencias</h6>
-          <table class="table table-sm" id="history">
-            <thead class="table-light"><tr><th>Fecha</th><th>Destinatario</th><th>Monto</th><th>Estado</th></tr></thead>
-            <tbody></tbody>
-          </table>
+          <div id="transferMsg" class="transfer-msg" style="display:none;"></div>
+
+          <div class="form-section">
+            <h6><i class="bi bi-clock-history me-2"></i>Historial de transferencias</h6>
+            <div class="table-responsive">
+              <table class="table table-sm history-table" id="history">
+                <thead><tr><th>Fecha</th><th>Destinatario</th><th>Monto</th><th>Estado</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- Atacante -->
-    <div class="col-md-6">
-      <div class="card h-100">
-        <div class="card-header bg-white fw-semibold"><i class="bi bi-bug-fill me-1 text-danger"></i>Vista del Atacante</div>
+    <div class="col-12 col-lg-4 col-xl-4 mb-3">
+      <div class="card h-100 attacker-card">
+        <div class="card-header">
+          <i class="bi bi-bug-fill me-2"></i>Vista del Atacante
+        </div>
         <div class="card-body">
-          <div class="alert alert-info py-2"><strong>¿Qué es CSRF?</strong><br/>CSRF (Cross‑Site Request Forgery) es un ataque que engaña al navegador de un usuario para que ejecute acciones no deseadas en una aplicación donde está autenticado.</div>
+          <div class="info-box">
+            <strong>¿Qué es CSRF?</strong><br/>
+            CSRF (Cross-Site Request Forgery) es un ataque que engaña al navegador de un usuario para que ejecute acciones no deseadas en una aplicación donde está autenticado.
+          </div>
 
-          <h6>Solicitud capturada</h6>
+          <h6><i class="bi bi-crosshair me-2"></i>Solicitud capturada</h6>
           <div id="captureBox" class="codebox mb-3">Esperando transferencia del usuario…</div>
-          <button id="sendAttack" class="btn btn-danger w-100 mb-3"><i class="bi bi-exclamation-triangle me-1"></i>Generar y enviar ataque</button>
-          <button id="explainBtn" class="btn btn-secondary w-100 mb-3" style="display:none;"><i class="bi bi-question-circle me-1"></i>¿Qué sucedió?</button>
+          
+          <div class="mb-3">
+            <label class="form-label">Cantidad a robar ($)</label>
+            <input id="stealAmount" type="number" min="1" class="form-control amount-input" value="1500" placeholder="Ingresa la cantidad"/>
+          </div>
+          
+          <button id="sendAttack" class="btn btn-attack w-100 mb-3">
+            <i class="bi bi-exclamation-triangle me-2"></i>Generar payload malicioso
+          </button>
 
-          <div class="alert alert-info py-2"><strong>¿Cómo funciona el exploit?</strong><br/>El atacante crea una página HTML maliciosa con un formulario oculto que replica la solicitud de transferencia. Cuando la víctima visita esa página con su sesión activa, la transferencia se ejecuta automáticamente.</div>
+          <div class="info-box">
+            <strong>¿Cómo funciona el exploit?</strong><br/>
+            El atacante crea una página HTML maliciosa que contiene un formulario oculto que replica la solicitud de transferencia. Cuando la víctima visita esa página, el navegador envía la solicitud automáticamente.
+          </div>
 
-          <h6>PoC generada</h6>
-          <div id="pocBox" class="codebox">// El exploit se mostrará aquí tras capturar una solicitud</div>
+          <h6><i class="bi bi-code-slash me-2"></i>PoC generada</h6>
+          <div id="pocBox" class="codebox codebox-green mb-3">// El exploit se generará aquí después de capturar una solicitud</div>
+
+          <button id="sendPhishing" class="btn btn-attack w-100 mb-3" style="display:none;">
+            <i class="bi bi-send me-2"></i>Enviar mensaje a la víctima
+          </button>
+          <button id="explainBtn" class="btn btn-secondary w-100 mb-3" style="display:none;">
+            <i class="bi bi-question-circle me-2"></i>¿Cómo funciona el exploit?
+          </button>
         </div>
       </div>
     </div>
 
     <!-- Chat -->
-    <div class="col-12">
-      <div class="card">
-        <div class="card-header bg-white fw-semibold"><i class="bi bi-chat-dots-fill me-1"></i>Chat SeguroBank</div>
-        <div class="card-body" style="min-height:180px;max-height:280px;overflow-y:auto;" id="msgs"></div>
+    <div class="col-12 col-lg-4 col-xl-4 mb-3">
+      <div class="card h-100 chat-card">
+        <div class="card-header">
+          <i class="bi bi-chat-dots-fill me-2"></i>Chat SecuroBank
+        </div>
+        <div class="card-body">
+          <div class="chat-container" id="msgs"></div>
+        </div>
       </div>
+    </div>
     </div>
   </div>
 
-  <footer>Simulador Educativo de CSRF — SecureBank © 2025 | Este sitio es una simulación para fines educativos</footer>
+  <footer>
+    Simulador Educativo de CSRF — SecureBank © 2025 | Este sitio es una simulación para fines educativos
+  </footer>
 </div>
 
 <!-- Modal explicación -->
 <div class="modal fade" id="explainModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title"><i class="bi bi-eye"></i> ¿Qué sucedió?</h5>
+        <h5 class="modal-title"><i class="bi bi-lightbulb me-2"></i>¿Qué sucedió?</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <p class="mb-2"><strong>Paso a paso del ataque CSRF</strong></p>
+        <h6 class="mb-3">Paso a paso del ataque CSRF</h6>
         <ol>
           <li>El usuario inicia sesión y posee una <em>cookie</em> de sesión válida.</li>
           <li>Realiza una transferencia legítima ➡️ la solicitud completa aparece en el panel del atacante.</li>
@@ -102,12 +355,13 @@
           <li>El navegador del usuario envía la <span class="text-danger">solicitud forjada</span> automáticamente porque la cookie se envía junto con el dominio bancario.</li>
           <li>El servidor no distingue entre una acción intencional y la forjada, por lo que procesa la transferencia.</li>
         </ol>
-        <p class="mt-3"><strong>Diagrama rápido</strong></p>
-        <pre class="codebox">Víctima 🧑‍💻  ──(1 Transferencia)──▶ Banco 🏦
-                        ▲
-Atacante 😈 ─(2 Captura)─┘
-Atacante 😈 ─(3 Link)──▶ Víctima 🧑‍💻─(4 Solicitud forjada)─▶ Banco 🏦</pre>
-        <p class="mt-3"><strong>Mitigaciones imprescindibles</strong></p>
+        
+        <h6 class="mt-4 mb-3">Diagrama del ataque</h6>
+        <div class="text-center">
+          <img src="csrf.png" alt="Diagrama CSRF" class="img-fluid rounded" style="max-width: 100%; height: auto;"/>
+        </div>
+        
+        <h6 class="mt-4 mb-3">Mitigaciones imprescindibles</h6>
         <ul>
           <li>Tokens CSRF únicos y verificables en cada formulario.</li>
           <li>Cookies con atributo <code>SameSite=Strict</code>.</li>
@@ -115,76 +369,326 @@ Atacante 😈 ─(3 Link)──▶ Víctima 🧑‍💻─(4 Solicitud for
           <li>Requerir doble factor o confirmación adicional en operaciones críticas.</li>
         </ul>
       </div>
-      <div class="modal-footer"><button type="button" class="btn btn-primary" data-bs-dismiss="modal">Entendido</button></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Entendido</button>
+      </div>
     </div>
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 // ------- Estado y utilidades -------
-let balance=5000;
-const balanceText=document.getElementById('balanceText');
-const historyBody=document.querySelector('#history tbody');
-const captureBox=document.getElementById('captureBox');
-const pocBox=document.getElementById('pocBox');
-const msgs=document.getElementById('msgs');
-const transferMsg=document.getElementById('transferMsg');
-const explainBtn=document.getElementById('explainBtn');
-let captured=null;
-function euro(n){return `€${n.toLocaleString('es-ES',{minimumFractionDigits:2})}`;}
-function addBubble(text,right=false){const div=document.createElement('div');div.className=`bubble ${right?'right-bub':'left-bub'}`;div.innerHTML=text;msgs.append(div);msgs.scrollTop=msgs.scrollHeight;}
-function logTransfer(to,amount,csrf=false){const tr=document.createElement('tr');tr.innerHTML=`<td>${new Date().toLocaleDateString()}</td><td>${to}</td><td>${euro(amount)}</td><td>${csrf?'<span class="badge bg-danger">CSRF</span>':'<span class="badge bg-success">OK</span>'}</td>`;historyBody.prepend(tr);}
+let balance = 5000;
+const balanceText = document.getElementById('balanceText');
+const historyBody = document.querySelector('#history tbody');
+const captureBox = document.getElementById('captureBox');
+const pocBox = document.getElementById('pocBox');
+const msgs = document.getElementById('msgs');
+const transferMsg = document.getElementById('transferMsg');
+const explainBtn = document.getElementById('explainBtn');
+const transferBtn = document.getElementById('transferBtn');
+const sendAttack = document.getElementById('sendAttack');
+const sendPhishing = document.getElementById('sendPhishing');
+let captured = null;
+
+function dollar(n) {
+  return `$${n.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+}
+
+function addBubble(text, right = false) {
+  const div = document.createElement('div');
+  div.className = `bubble ${right ? 'right-bub' : 'left-bub'}`;
+  
+  const messageTime = new Date().toLocaleTimeString('es-ES', { 
+    hour: '2-digit', 
+    minute: '2-digit' 
+  });
+  
+  div.innerHTML = `
+    <div>${text}</div>
+    <div class="chat-time">${messageTime}</div>
+  `;
+  
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function addSystemBubble(text) {
+  const div = document.createElement('div');
+  div.className = 'bubble system-bub';
+  
+  const messageTime = new Date().toLocaleTimeString('es-ES', { 
+    hour: '2-digit', 
+    minute: '2-digit' 
+  });
+  
+  div.innerHTML = `
+    <div>${text}</div>
+    <div class="chat-time">${messageTime}</div>
+  `;
+  
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function addAppBubble(text) {
+  const div = document.createElement('div');
+  div.className = 'bubble app-bub';
+  
+  const messageTime = new Date().toLocaleTimeString('es-ES', { 
+    hour: '2-digit', 
+    minute: '2-digit' 
+  });
+  
+  div.innerHTML = `
+    <div>${text}</div>
+    <div class="chat-time">${messageTime}</div>
+  `;
+  
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+// Función expandChat eliminada - ya no es necesaria
+
+function logTransfer(to, amount, csrf = false) {
+  const tr = document.createElement('tr');
+  const shortTo = to.length > 12 ? to.substring(0, 12) + '...' : to;
+  tr.innerHTML = `
+    <td>${new Date().toLocaleDateString()}</td>
+    <td title="${to}">${shortTo}</td>
+    <td>${dollar(amount)}</td>
+    <td>${csrf ? '<span class="badge bg-danger status-badge">CSRF</span>' : '<span class="badge bg-success status-badge">OK</span>'}</td>
+  `;
+  historyBody.prepend(tr);
+}
+
+function showTransferMessage(prevBalance, newBalance) {
+  transferMsg.style.display = 'block';
+  transferMsg.textContent = `Saldo anterior: ${dollar(prevBalance)} | Saldo actual: ${dollar(newBalance)}`;
+  setTimeout(() => {
+    transferMsg.style.display = 'none';
+  }, 6000);
+}
 
 // ------- Transferencia legítima -------
-transferBtn.addEventListener('click',()=>{
-  const to=document.getElementById('to').value.trim();
-  const amt=parseFloat(document.getElementById('amount').value);
-  if(!to||!amt||amt<=0){alert('Completa los campos');return;}
-  if(amt>balance){alert('Saldo insuficiente');return;}
-  const prev=balance;balance-=amt;balanceText.textContent=euro(balance);
-  transferMsg.textContent=`Saldo anterior: ${euro(prev)} | Saldo actual: ${euro(balance)}`;
-  setTimeout(()=>transferMsg.textContent='',6000);
-  logTransfer(to,amt);
-  // construir solicitud estilo BurpSuite
-  captured=`POST /transfer HTTP/1.1
-Host: www.securebank.com
-Content-Type: application/x-www-form-urlencoded
-Cookie: session_id=user123456
+transferBtn.addEventListener('click', () => {
+  const to = document.getElementById('to').value.trim();
+  const amt = parseFloat(document.getElementById('amount').value);
+  
+  if (!to || !amt || amt <= 0) {
+    alert('Por favor, completa todos los campos correctamente');
+    return;
+  }
+  
+  if (amt > balance) {
+    alert('Saldo insuficiente');
+    return;
+  }
+  
+  const prevBalance = balance;
+  balance -= amt;
+  balanceText.textContent = dollar(balance);
+  showTransferMessage(prevBalance, balance);
+  logTransfer(to, amt);
+  
+  // Construir solicitud estilo BurpSuite con JWT y cookies realistas
+  const jwtToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
+  const sessionId = 'sess_' + Math.random().toString(36).substring(2, 15);
+  const csrfToken = 'csrf_' + Math.random().toString(36).substring(2, 10);
+  
+  captured = `POST /api/v1/transfer HTTP/1.1
+Host: securebank.com
+Content-Type: application/json
+Authorization: Bearer ${jwtToken}
+Cookie: session_id=${sessionId}; auth_token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMTIzIn0.ktnlVHtruc2; __Secure-csrf=${csrfToken}
+X-Requested-With: XMLHttpRequest
+Origin: https://securebank.com
+Referer: https://securebank.com/dashboard
 
-recipient=${encodeURIComponent(to)}&amount=${amt}`;
-  captureBox.textContent=captured;
-  pocBox.textContent=`<form action='https://www.securebank.com/transfer' method='POST'>
- <input name='recipient' value='${to}'>
- <input name='amount' value='${amt}'>
-</form>`;
-  addBubble('✅ Usuario realizó una transferencia.',true);
+{
+  "recipient": "${to}",
+  "amount": ${amt},
+  "currency": "USD",
+  "csrf_token": "${csrfToken}"
+}`;
+  
+  captureBox.textContent = captured;
+  
+  // Resetear el estado del atacante
+  sendAttack.innerHTML = '<i class="bi bi-exclamation-triangle me-2"></i>Generar payload malicioso';
+  sendAttack.disabled = false;
+  sendPhishing.style.display = 'none';
+  sendPhishing.innerHTML = '<i class="bi bi-send me-2"></i>Enviar mensaje a la víctima';
+  sendPhishing.disabled = false;
+  
+  // NO generar PoC automáticamente, solo cuando el atacante presione el botón
+  pocBox.textContent = '// Presiona "Generar payload malicioso" para crear el exploit';
+  
+  addBubble('✅ Transferencia realizada exitosamente. El dinero ha sido enviado a la cuenta especificada.', true);
+  addBubble('😊 ¡Perfecto! Mi cuenta sigue segura con SecureBank.', true);
 });
 
 // ------- Ataque CSRF -------
-function csrfAttack(e){e.preventDefault();
-  const prev=balance;const amt=1500;balance-=amt;balanceText.textContent=euro(balance);
-  logTransfer('ES66 6666 6666 6666',amt,true);
-  addBubble('😈 Transferencia CSRF ejecutada. Revisa tu saldo.');
-  addBubble('😱 ¡Mi dinero! Voy a revisar el saldo…',true);
-  transferMsg.textContent=`Saldo anterior: ${euro(prev)} | Saldo actual: ${euro(balance)}`;
-  setTimeout(()=>transferMsg.textContent='',8000);
-  explainBtn.style.display='block';
+function csrfAttack(e) {
+  e.preventDefault();
+  const prevBalance = balance;
+  const stealAmount = parseFloat(document.getElementById('stealAmount').value) || 1500;
+  
+  if (stealAmount > balance) {
+    addBubble('😈 El usuario no tiene suficiente saldo para robar esa cantidad...');
+    return;
+  }
+  
+  balance -= stealAmount;
+  balanceText.textContent = dollar(balance);
+  logTransfer('4001-1234-5678-9999', stealAmount, true);
+  
+  addBubble(`😈 ¡Transferencia CSRF ejecutada exitosamente! Robé ${dollar(stealAmount)}! Revisa tu saldo...`);
+  addBubble('😱 ¡¿Qué?! ¡Mi dinero! ¿Cómo es posible?', true);
+  
+  showTransferMessage(prevBalance, balance);
+  explainBtn.style.display = 'block';
 }
 
-sendAttack.addEventListener('click',()=>{
-  if(!captured){alert('Aún no hay solicitud capturada');return;}
-  const phishing="Hola, soy del departamento de seguridad. Hemos detectado actividad inusual en tu cuenta. <a href='#' id='phish'>Haz clic aquí para verificar</a>";
-  addBubble(phishing);
-  setTimeout(()=>{const l=document.getElementById('phish');if(l)l.addEventListener('click',csrfAttack);},0);
+sendAttack.addEventListener('click', () => {
+  if (!captured) {
+    alert('Primero debes capturar una solicitud. El usuario debe realizar una transferencia.');
+    return;
+  }
+  
+  const stealAmount = parseFloat(document.getElementById('stealAmount').value) || 1500;
+  
+  // Generar la PoC con la cantidad personalizada
+  pocBox.textContent = `<!-- Formulario malicioso generado -->
+<form action='https://securebank.com/api/v1/transfer' method='POST' style='display:none;'>
+  <input name='recipient' value='4001-1234-5678-9999'>
+  <input name='amount' value='${stealAmount}'>
+  <input name='currency' value='USD'>
+  <input type='submit' value='Enviar'>
+</form>
+<script>document.forms[0].submit();<\/script>`;
+  
+  // Mostrar el botón para enviar el mensaje de phishing
+  sendPhishing.style.display = 'block';
+  
+  // Cambiar el texto del botón original
+  sendAttack.innerHTML = '<i class="bi bi-check-circle me-2"></i>Payload generado';
+  sendAttack.disabled = true;
+  
+  // Agregar mensaje informativo del atacante
+  addAppBubble('🔧 Excelente. He generado un formulario malicioso que replicará la transferencia. Ahora necesito engañar a la víctima...');
 });
 
+// ------- Enviar mensaje de phishing -------
+sendPhishing.addEventListener('click', () => {
+  // Enviar mensaje de phishing realista al chat
+  addBubble('🔒 Hola, soy del departamento de seguridad de SecureBank. Hemos detectado actividad sospechosa en tu cuenta en los últimos minutos.');
+  setTimeout(() => {
+    addBubble('⚠️ Por tu seguridad, necesitamos que verifiques tu identidad inmediatamente. Haz clic en el siguiente enlace para acceder al sistema de verificación:');
+    setTimeout(() => {
+      addBubble('🔗 <a href="#" onclick="executeCSRFAttack(); return false;" style="color: #3b82f6; text-decoration: underline; font-weight: 600;">https://securebank.com/security-verification</a>');
+      setTimeout(() => {
+        addBubble('⏰ Este enlace expirará en 5 minutos. Es urgente que completes la verificación para proteger tu cuenta.');
+      }, 1000);
+    }, 1500);
+  }, 2000);
+  
+  // Deshabilitar el botón después de enviar
+  sendPhishing.innerHTML = '<i class="bi bi-check-circle me-2"></i>Mensaje enviado';
+  sendPhishing.disabled = true;
+});
+
+// ------- Ejecutar ataque CSRF cuando se hace clic en el enlace -------
+function executeCSRFAttack() {
+  addBubble('🤔 Hmm, déjame verificar mi identidad. Parece urgente...', true);
+  addBubble('� *haciendo clic en el enlace*', true);
+  
+  setTimeout(() => {
+    addBubble('�💀 El usuario ha hecho clic en el enlace malicioso...');
+  }, 1000);
+  
+  // Ejecutar el ataque CSRF
+  setTimeout(() => {
+    const stealAmount = parseFloat(document.getElementById('stealAmount').value) || 1500;
+    
+    if (balance >= stealAmount) {
+      const prevBalance = balance;
+      balance -= stealAmount;
+      balanceText.textContent = dollar(balance);
+      logTransfer('4001-1234-5678-9999', stealAmount, true);
+      
+      addBubble(`💰 ¡Ataque exitoso! Se han robado ${dollar(stealAmount)} de la cuenta de la víctima.`);
+      transferMsg.innerHTML = `<i class="bi bi-exclamation-triangle me-2"></i>¡Ataque CSRF completado! Se transfirieron ${dollar(stealAmount)} sin autorización.`;
+      transferMsg.style.display = 'block';
+      transferMsg.style.background = '#dc2626';
+      transferMsg.style.color = 'white';
+      transferMsg.style.border = '1px solid #dc2626';
+      
+      // Mostrar el botón de explicación después del ataque exitoso
+      explainBtn.style.display = 'block';
+      
+      // Añadir respuesta del cliente después del ataque
+      setTimeout(() => {
+        addBubble('😨 ¡Espera! ¿Qué acaba de pasar? ¡Mi saldo ha disminuido!', true);
+        setTimeout(() => {
+          addBubble('😠 ¡No hice ninguna transferencia a esa cuenta! ¿Cómo es posible?', true);
+          setTimeout(() => {
+            addBubble('🚨 ¡Esto es un fraude! ¿Cómo pudieron robar mi dinero solo con hacer clic en un enlace?', true);
+            setTimeout(() => {
+              addBubble('🏦 Estimado cliente, nuestro sistema de seguridad ha detectado que acaba de ser víctima de un ataque CSRF (Cross-Site Request Forgery). Le explicamos lo que ocurrió:');
+              setTimeout(() => {
+                addBubble('🔍 **¿Cómo funcionó el ataque?** 1) Usted realizó una transferencia legítima → 2) Un atacante capturó la estructura de su solicitud → 3) El atacante creó un formulario malicioso que replica esa solicitud');
+                setTimeout(() => {
+                  addBubble('⚠️ **El problema:** Su navegador envió automáticamente las cookies de sesión con el formulario malicioso, haciendo que nuestro servidor procesara la transferencia como si fuera autorizada por usted.');
+                  setTimeout(() => {
+                    addBubble('🛡️ **Medidas de protección:** Implementamos tokens CSRF, cookies SameSite=Strict y verificación de origen para prevenir estos ataques. Para más detalles técnicos, <a href="#" onclick="document.getElementById(\'explainBtn\').click(); return false;" style="color: #2563eb; text-decoration: underline; font-weight: 600;">consulte aquí la explicación completa</a>');
+                  }, 2000);
+                }, 2500);
+              }, 2000);
+            }, 2000);
+          }, 2000);
+        }, 1500);
+      }, 3000);
+      
+      showTransferMessage(prevBalance, balance);
+      
+    } else {
+      addBubble(`❌ Error: Saldo insuficiente. Solo quedan ${dollar(balance)} en la cuenta.`);
+      addBubble('😮‍💨 ¡Por suerte no tenía suficiente dinero! Pero... ¿qué hubiera pasado si tuviera más saldo?', true);
+      transferMsg.innerHTML = `<i class="bi bi-x-circle me-2"></i>Error: Saldo insuficiente para robar ${dollar(stealAmount)}`;
+      transferMsg.style.display = 'block';
+      transferMsg.style.background = '#dc2626';
+      transferMsg.style.color = 'white';
+      transferMsg.style.border = '1px solid #dc2626';
+      
+      // Mostrar explicación incluso si no hay saldo suficiente
+      explainBtn.style.display = 'block';
+      
+      // Explicar el ataque incluso si falló
+      setTimeout(() => {
+        addBubble('🏦 Estimado cliente, aunque la transferencia no se completó por saldo insuficiente, nuestro sistema detectó un intento de ataque CSRF. Le explicamos qué ocurrió:');
+        setTimeout(() => {
+          addBubble('⚠️ **¿Qué pasó?** Su navegador envió una solicitud de transferencia sin su conocimiento cuando hizo clic en el enlace. Si hubiera tenido más saldo, la transferencia se habría ejecutado.');
+          setTimeout(() => {
+            addBubble('🛡️ **Lección importante:** Nunca haga clic en enlaces sospechosos, incluso si parecen ser de su banco. Para conocer más sobre cómo protegerse, <a href="#" onclick="document.getElementById(\'explainBtn\').click(); return false;" style="color: #2563eb; text-decoration: underline; font-weight: 600;">consulte aquí la explicación completa</a>');
+          }, 2500);
+        }, 2000);
+      }, 2000);
+    }
+  }, 2000);
+}
+
 // ------- Mostrar explicación -------
-explainBtn.addEventListener('click',()=>{
-  const modal=new bootstrap.Modal(document.getElementById('explainModal'));
+explainBtn.addEventListener('click', () => {
+  const modal = new bootstrap.Modal(document.getElementById('explainModal'));
   modal.show();
 });
+
+// Mensaje inicial
+addBubble('¡Bienvenido a SecureBank! 🏦 Tu cuenta está protegida con nuestros mejores sistemas de seguridad.');
+addSystemBubble('Para comenzar la simulación, realiza una transferencia legítima usando el panel izquierdo. El atacante capturará automáticamente tu solicitud.');
 </script>
+</body>
+</html>
