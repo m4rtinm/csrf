@@ -8,7 +8,302 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
   <style>
     body{background:linear-gradient(135deg,#0a0a0a 0%,#1a1a1a 50%,#2a2a2a 100%);min-height:100vh;color:#ffffff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;margin:0;padding:0;}
-    .main-header{background:#1f1f1f;box-shadow:0 4px 20px rgba(0,0,0,.5);padding:1.5rem 0;margin-bottom:1.5rem;border-bottom:1px solid #404040;width:100%;}
+    
+    /* Barra superior única */
+    .main-header{
+      background:#1f1f1f;
+      box-shadow:0 4px 20px rgba(0,0,0,.5);
+      padding:1.5rem 0;
+      margin-bottom:1.5rem;
+      border-bottom:1px solid #404040;
+      width:100%;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .main-header .container-fluid {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    .main-header h1 {
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .main-header p {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+    
+    /* Botones de navegación */
+    .nav-button {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #ffffff;
+      padding: 0.6rem 1.2rem;
+      border-radius: 0.5rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      margin: 0 0.5rem;
+      font-size: 0.95rem;
+    }
+    
+    .nav-button:hover {
+      background: rgba(255,255,255,0.2);
+      transform: translateY(-2px);
+    }
+    
+    .nav-button.active {
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      border-color: #2563eb;
+    }
+    
+    /* Páginas */
+    .page {
+      display: none;
+    }
+    
+    .page.active {
+      display: block;
+    }
+    
+    /* Estilos del centro de aprendizaje */
+    .learning-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    .learning-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    
+    .learning-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .learning-nav {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    
+    .learning-nav-button {
+      background: #2a2a2a;
+      border: 1px solid #404040;
+      color: #ffffff;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .learning-nav-button:hover {
+      background: #404040;
+      transform: translateY(-2px);
+    }
+    
+    .learning-nav-button.active {
+      background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+      border-color: #dc2626;
+    }
+    
+    .learning-content {
+      background: #1f1f1f;
+      border: 1px solid #404040;
+      border-radius: 1rem;
+      padding: 2rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+    
+    .theory-section {
+      display: none;
+    }
+    
+    .theory-section.active {
+      display: block;
+    }
+    
+    .theory-section h3 {
+      color: #60a5fa;
+      margin-bottom: 1.5rem;
+      font-size: 1.8rem;
+    }
+    
+    .theory-section h4 {
+      color: #ffffff;
+      margin-bottom: 1rem;
+      font-size: 1.3rem;
+    }
+    
+    .vulnerability-card, .tool-card, .mitigation-card {
+      background: #2a2a2a;
+      border: 1px solid #404040;
+      border-left: 4px solid #dc2626;
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s ease;
+    }
+    
+    .vulnerability-card:hover, .tool-card:hover, .mitigation-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(220,38,38,0.2);
+    }
+    
+    .tool-card {
+      border-left-color: #2563eb;
+    }
+    
+    .tool-card:hover {
+      box-shadow: 0 4px 20px rgba(37,99,235,0.2);
+    }
+    
+    .mitigation-card {
+      border-left-color: #22c55e;
+    }
+    
+    .mitigation-card:hover {
+      box-shadow: 0 4px 20px rgba(34,197,94,0.2);
+    }
+    
+    .code-example {
+      background: #0a0a0a;
+      color: #00ff88;
+      font-family: 'Fira Code', Monaco, Consolas, monospace;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      border: 1px solid #404040;
+      margin: 1rem 0;
+      overflow-x: auto;
+    }
+    
+    .csrf-flow {
+      background: #1a1a1a;
+      border: 1px solid #404040;
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+      margin: 1rem 0;
+    }
+    
+    .csrf-flow h5 {
+      color: #ff6b6b;
+      margin-bottom: 1rem;
+    }
+    
+    .flow-step {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding: 0.75rem;
+      background: #2a2a2a;
+      border-radius: 0.5rem;
+      border-left: 3px solid #dc2626;
+    }
+    
+    .flow-step-number {
+      background: #dc2626;
+      color: white;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 1rem;
+      font-weight: bold;
+    }
+    
+    .headers-example {
+      background: #1a1a1a;
+      border: 1px solid #22c55e;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+    
+    .headers-example h5 {
+      color: #22c55e;
+      margin-bottom: 0.5rem;
+    }
+    
+    .headers-example code {
+      background: #0a0a0a;
+      color: #00ff88;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+    }
+    
+    /* Estilos para el diagrama */
+    .diagram-container {
+      background: #1a1a1a;
+      border: 1px solid #404040;
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      text-align: center;
+    }
+    
+    .diagram-container img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+    
+    .diagram-container h5 {
+      color: #60a5fa;
+      margin-bottom: 1rem;
+    }
+    
+    .diagram-container p {
+      color: #a9b1d6;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+    }
+    
+    @media (max-width: 768px) {
+      .navbar-content {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .nav-button {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+        margin: 0 0.25rem;
+      }
+      
+      .learning-container {
+        padding: 1rem;
+      }
+      
+      .learning-header h1 {
+        font-size: 2rem;
+      }
+      
+      .learning-nav {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .learning-nav-button {
+        width: 100%;
+        text-align: center;
+      }
+    }
     .card{background:#1f1f1f;box-shadow:0 8px 32px rgba(0,0,0,.6);border:1px solid #404040;border-radius:.75rem;overflow:hidden;width:100%;min-height:450px;}
     .card-header{font-weight:600;padding:1rem 1.5rem;border-bottom:1px solid #404040;color:#ffffff;}
     .user-card .card-header{background:#2563eb;color:white;}
@@ -131,6 +426,11 @@
     .info-box strong{color:#60a5fa;}
     .info-box{color:#e5e5e5;}
     .bubble{max-width:80%;padding:1rem 1.25rem;border-radius:18px;margin-bottom:.75rem;font-size:.95rem;word-wrap:break-word;line-height:1.4;position:relative;}
+    .bubble strong, .bubble b {
+      font-weight: 700 !important;
+      color: inherit;
+    }
+    .bubble b{font-weight:700;color:inherit;}
     .left-bub{background:#ffffff;border:none;box-shadow:0 2px 8px rgba(0,0,0,.15);color:#1f1f1f;margin-right:auto;}
     .right-bub{background:#dcf8c6;margin-left:auto;border:none;box-shadow:0 2px 8px rgba(0,0,0,.15);color:#1f1f1f;}
     .system-bub{background:#e3f2fd;border:1px solid #2196f3;color:#0d47a1;margin:0 auto;max-width:95%;font-size:.9rem;border-radius:12px;text-align:center;}
@@ -225,9 +525,22 @@
         SecureBank - Simulador CSRF
       </h1>
       <p class="text-muted mb-0 fs-5">Laboratorio interactivo para entender y prevenir ataques Cross-Site Request Forgery (CSRF)</p>
+      
+      <!-- Navegación integrada -->
+      <div class="mt-3">
+        <button class="nav-button active" data-page="simulator">
+          🧪 Simulador
+        </button>
+        <button class="nav-button" data-page="learning">
+          📚 Centro de Aprendizaje
+        </button>
+      </div>
     </div>
   </div>
 </div>
+
+<!-- Página del Simulador -->
+<div class="page active" id="simulator-page">
 
 <div class="container-fluid px-3">
   <div class="main-container">
@@ -336,6 +649,468 @@
     Simulador Educativo de CSRF — SecureBank © 2025 | Este sitio es una simulación para fines educativos
   </footer>
 </div>
+</div>
+
+<!-- Página del Centro de Aprendizaje -->
+<div class="page" id="learning-page">
+  <div class="learning-container">
+    <div class="learning-header">
+      <h1>Centro de Aprendizaje CSRF</h1>
+      <p class="text-muted">Aprende todo sobre Cross-Site Request Forgery y cómo protegerte</p>
+    </div>
+    
+    <div class="learning-nav">
+      <button class="learning-nav-button active" data-section="introduction">
+        🎯 Introducción
+      </button>
+      <button class="learning-nav-button" data-section="how-it-works">
+        ⚙️ Cómo Funciona
+      </button>
+      <button class="learning-nav-button" data-section="vulnerabilities">
+        ⚠️ Vulnerabilidades
+      </button>
+      <button class="learning-nav-button" data-section="mitigations">
+        🛡️ Mitigaciones
+      </button>
+      <button class="learning-nav-button" data-section="tools">
+        🛠️ Herramientas
+      </button>
+      <button class="learning-nav-button" data-section="examples">
+        📝 Ejemplos
+      </button>
+    </div>
+    
+    <div class="learning-content">
+      <!-- Introducción -->
+      <div class="theory-section active" id="introduction">
+        <h3>🎯 ¿Qué es CSRF?</h3>
+        
+        <p><strong>CSRF (Cross-Site Request Forgery)</strong> es un ataque que engaña al navegador de un usuario para que ejecute acciones no deseadas en una aplicación web donde el usuario está autenticado.</p>
+        
+        <div class="vulnerability-card">
+          <h4>🔍 Definición Técnica</h4>
+          <p>CSRF es una vulnerabilidad que permite a un atacante inducir a los usuarios a realizar acciones que no tienen la intención de realizar. En un ataque CSRF exitoso, el atacante hace que la víctima ejecute una acción no deseada en una aplicación web en la que la víctima está autenticada.</p>
+        </div>
+        
+        <div class="vulnerability-card">
+          <h4>🎯 Objetivo del Ataque</h4>
+          <p>El objetivo principal es aprovecharse de la confianza que una aplicación web tiene en el navegador del usuario. Si un usuario está autenticado en un sitio web, el navegador enviará automáticamente las cookies de sesión con cada solicitud a ese dominio.</p>
+        </div>
+        
+        <div class="vulnerability-card">
+          <h4>💰 Impacto Potencial</h4>
+          <ul>
+            <li>Transferencias bancarias no autorizadas</li>
+            <li>Cambios de configuración de cuenta</li>
+            <li>Compras fraudulentas</li>
+            <li>Modificación o eliminación de datos</li>
+            <li>Cambios de contraseña</li>
+            <li>Acciones administrativas no autorizadas</li>
+          </ul>
+        </div>
+        
+        <div class="csrf-flow">
+          <h5>📊 Estadísticas CSRF</h5>
+          <p><strong>OWASP Top 10 2021:</strong> A01:2021 - Broken Access Control (incluye CSRF)</p>
+          <p><strong>Prevalencia:</strong> Aproximadamente 94% de aplicaciones tienen alguna forma de control de acceso roto</p>
+          <p><strong>Impacto:</strong> Promedio de 5.4 Common Weakness Enumerations (CWEs) por aplicación</p>
+        </div>
+      </div>
+      
+      <!-- Cómo Funciona -->
+      <div class="theory-section" id="how-it-works">
+        <h3>⚙️ Cómo Funciona un Ataque CSRF</h3>
+        
+        <div class="csrf-flow">
+          <h5>🔄 Flujo del Ataque CSRF</h5>
+          
+          <div class="flow-step">
+            <div class="flow-step-number">1</div>
+            <div>
+              <strong>Autenticación Legítima</strong><br>
+              El usuario se autentica en el sitio web objetivo (ej: banco online) y recibe cookies de sesión
+            </div>
+          </div>
+          
+          <div class="flow-step">
+            <div class="flow-step-number">2</div>
+            <div>
+              <strong>Captura de Solicitud</strong><br>
+              El atacante observa o captura una solicitud HTTP legítima del usuario (ej: transferencia bancaria)
+            </div>
+          </div>
+          
+          <div class="flow-step">
+            <div class="flow-step-number">3</div>
+            <div>
+              <strong>Creación del Payload</strong><br>
+              El atacante crea una página web maliciosa que replica la solicitud capturada
+            </div>
+          </div>
+          
+          <div class="flow-step">
+            <div class="flow-step-number">4</div>
+            <div>
+              <strong>Engaño Social</strong><br>
+              El atacante engaña al usuario para que visite la página maliciosa (email, link, etc.)
+            </div>
+          </div>
+          
+          <div class="flow-step">
+            <div class="flow-step-number">5</div>
+            <div>
+              <strong>Ejecución Automática</strong><br>
+              El navegador envía automáticamente la solicitud forjada con las cookies de sesión
+            </div>
+          </div>
+          
+          <div class="flow-step">
+            <div class="flow-step-number">6</div>
+            <div>
+              <strong>Procesamiento del Servidor</strong><br>
+              El servidor procesa la solicitud como si fuera legítima, ejecutando la acción no deseada
+            </div>
+          </div>
+        </div>
+        
+        <div class="diagram-container">
+          <h5>📊 Diagrama Visual del Ataque CSRF</h5>
+          <img src="csrf.png" alt="Diagrama del Ataque CSRF" class="img-fluid"/>
+          <p>
+            <em>Representación visual del flujo completo de un ataque CSRF desde la perspectiva del atacante y la víctima</em>
+          </p>
+        </div>
+        
+        <div class="code-example">
+          <h5>📝 Ejemplo de Payload CSRF</h5>
+          <pre><code>&lt;!-- Formulario oculto que se envía automáticamente --&gt;
+&lt;form action="https://banco.com/transfer" method="POST" style="display:none;"&gt;
+  &lt;input name="to" value="cuenta-atacante"&gt;
+  &lt;input name="amount" value="1000"&gt;
+  &lt;input name="currency" value="EUR"&gt;
+&lt;/form&gt;
+
+&lt;script&gt;
+  // Envío automático al cargar la página
+  document.forms[0].submit();
+&lt;/script&gt;</code></pre>
+        </div>
+      </div>
+      
+      <!-- Vulnerabilidades -->
+      <div class="theory-section" id="vulnerabilities">
+        <h3>⚠️ Condiciones para un Ataque CSRF Exitoso</h3>
+        
+        <div class="vulnerability-card">
+          <h4>🍪 Dependencia de Cookies</h4>
+          <p>La aplicación debe usar cookies para autenticación. El navegador las enviará automáticamente con cada solicitud al dominio, incluso si la solicitud se origina desde otro sitio.</p>
+        </div>
+        
+        <div class="vulnerability-card">
+          <h4>🔓 Falta de Verificación de Origen</h4>
+          <p>La aplicación no verifica que la solicitud provenga del sitio legítimo. No valida headers como <code>Origin</code> o <code>Referer</code>.</p>
+        </div>
+        
+        <div class="vulnerability-card">
+          <h4>🎫 Ausencia de Tokens Anti-CSRF</h4>
+          <p>No hay tokens únicos que vinculen la solicitud con la sesión del usuario. Cada formulario debería incluir un token secreto impredecible.</p>
+        </div>
+        
+        <div class="vulnerability-card">
+          <h4>🔄 Acciones Predecibles</h4>
+          <p>Las acciones sensibles tienen parámetros predecibles que un atacante puede replicar fácilmente (nombres de campo, formatos, etc.).</p>
+        </div>
+        
+        <div class="vulnerability-card">
+          <h4>🌐 Configuración Insegura de SameSite</h4>
+          <p>Las cookies no tienen el atributo <code>SameSite</code> configurado o están configuradas como <code>None</code>, permitiendo solicitudes cross-site.</p>
+        </div>
+        
+        <div class="vulnerability-card">
+          <h4>📋 Métodos HTTP Inseguros</h4>
+          <p>La aplicación permite cambios de estado usando métodos GET, o acepta tanto GET como POST para acciones sensibles.</p>
+        </div>
+      </div>
+      
+      <!-- Mitigaciones -->
+      <div class="theory-section" id="mitigations">
+        <h3>🛡️ Mitigaciones y Defensas</h3>
+        
+        <div class="mitigation-card">
+          <h4>🎫 Tokens Anti-CSRF</h4>
+          <p>Implementar tokens únicos, impredecibles y vinculados a la sesión del usuario.</p>
+          
+          <div class="headers-example">
+            <h5>Implementación en HTML</h5>
+            <code>&lt;input type="hidden" name="csrf_token" value="abc123xyz789"&gt;</code>
+          </div>
+          
+          <div class="headers-example">
+            <h5>Validación en el servidor</h5>
+            <code>
+              if ($_POST['csrf_token'] !== $_SESSION['csrf_token']) {<br>
+              &nbsp;&nbsp;die('CSRF token inválido');<br>
+              }
+            </code>
+          </div>
+        </div>
+        
+        <div class="mitigation-card">
+          <h4>🍪 Configuración Segura de Cookies</h4>
+          <p>Usar el atributo <code>SameSite</code> para prevenir el envío de cookies en solicitudes cross-site.</p>
+          
+          <div class="headers-example">
+            <h5>Configuración recomendada</h5>
+            <code>Set-Cookie: sessionid=abc123; SameSite=Strict; Secure; HttpOnly</code>
+          </div>
+          
+          <div class="headers-example">
+            <h5>Opciones SameSite</h5>
+            <ul>
+              <li><code>Strict</code>: Nunca envía cookies cross-site</li>
+              <li><code>Lax</code>: Solo en navegación top-level</li>
+              <li><code>None</code>: Permite cross-site (requiere Secure)</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="mitigation-card">
+          <h4>🔍 Verificación de Origen</h4>
+          <p>Validar las cabeceras <code>Origin</code> y <code>Referer</code> para asegurar que las solicitudes provienen del dominio correcto.</p>
+          
+          <div class="headers-example">
+            <h5>Validación de Origin</h5>
+            <code>
+              if ($_SERVER['HTTP_ORIGIN'] !== 'https://mibanco.com') {<br>
+              &nbsp;&nbsp;http_response_code(403);<br>
+              &nbsp;&nbsp;die('Origen no autorizado');<br>
+              }
+            </code>
+          </div>
+        </div>
+        
+        <div class="mitigation-card">
+          <h4>🛡️ Cabeceras de Seguridad</h4>
+          <p>Implementar cabeceras HTTP adicionales para mejorar la seguridad.</p>
+          
+          <div class="headers-example">
+            <h5>Cabeceras recomendadas</h5>
+            <code>
+              Content-Security-Policy: default-src 'self'<br>
+              X-Frame-Options: DENY<br>
+              X-Content-Type-Options: nosniff<br>
+              Referrer-Policy: strict-origin-when-cross-origin
+            </code>
+          </div>
+        </div>
+        
+        <div class="mitigation-card">
+          <h4>🔒 Doble Confirmación</h4>
+          <p>Para acciones críticas, requerir confirmación adicional como re-autenticación o 2FA.</p>
+          
+          <div class="headers-example">
+            <h5>Ejemplo de implementación</h5>
+            <code>
+              // Para transferencias &gt; $1000, requerir contraseña<br>
+              if ($amount &gt; 1000 && !verify_password($_POST['password'])) {<br>
+              &nbsp;&nbsp;die('Confirmación de contraseña requerida');<br>
+              }
+            </code>
+          </div>
+        </div>
+        
+        <div class="mitigation-card">
+          <h4>🌐 Configuración CORS</h4>
+          <p>Configurar CORS de manera restrictiva para limitar solicitudes cross-origin.</p>
+          
+          <div class="headers-example">
+            <h5>Configuración segura</h5>
+            <code>
+              Access-Control-Allow-Origin: https://mibanco.com<br>
+              Access-Control-Allow-Credentials: true<br>
+              Access-Control-Allow-Methods: POST, GET<br>
+              Access-Control-Allow-Headers: Content-Type, Authorization
+            </code>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Herramientas -->
+      <div class="theory-section" id="tools">
+        <h3>🛠️ Herramientas de Prueba y Análisis</h3>
+        
+        <div class="tool-card">
+          <h4>🔍 Burp Suite</h4>
+          <p>Herramienta profesional para pruebas de seguridad web con extensiones específicas para CSRF.</p>
+          <div class="code-example">
+            <strong>Características clave:</strong>
+            <ul>
+              <li>Generación automática de PoCs CSRF</li>
+              <li>Detección de tokens anti-CSRF</li>
+              <li>Análisis de configuración SameSite</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="tool-card">
+          <h4>🌐 OWASP ZAP</h4>
+          <p>Herramienta gratuita de seguridad web con capacidades de detección CSRF.</p>
+          <div class="code-example">
+            <strong>Funcionalidades:</strong>
+            <ul>
+              <li>Escaneo pasivo de vulnerabilidades CSRF</li>
+              <li>Generación de reportes detallados</li>
+              <li>Integración con pipelines CI/CD</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="tool-card">
+          <h4>🔧 CSRFTester</h4>
+          <p>Herramienta específica para pruebas de CSRF desarrollada por OWASP.</p>
+          <div class="code-example">
+            <strong>Uso:</strong>
+            <code>
+              java -jar CSRFTester.jar<br>
+              # 1. Configurar proxy<br>
+              # 2. Navegar por la aplicación<br>
+              # 3. Generar formularios de prueba
+            </code>
+          </div>
+        </div>
+        
+        <div class="tool-card">
+          <h4>🐍 Python Scripts</h4>
+          <p>Scripts personalizados para automatizar pruebas CSRF.</p>
+          <div class="code-example">
+            <strong>Ejemplo básico:</strong>
+            <code>
+              import requests<br>
+              <br>
+              # Probar CSRF en endpoint<br>
+              response = requests.post(<br>
+              &nbsp;&nbsp;'https://target.com/transfer',<br>
+              &nbsp;&nbsp;data={'to': 'attacker', 'amount': 1000},<br>
+              &nbsp;&nbsp;cookies={'session': 'victim_session'}<br>
+              )<br>
+              <br>
+              print(f"Status: {response.status_code}")
+            </code>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Ejemplos -->
+      <div class="theory-section" id="examples">
+        <h3>📝 Ejemplos Prácticos</h3>
+        
+        <div class="vulnerability-card">
+          <h4>💰 Transferencia Bancaria</h4>
+          <p>Ejemplo clásico de CSRF para transferencias financieras.</p>
+          
+          <div class="code-example">
+            <strong>Solicitud legítima:</strong>
+            <code>
+              POST /transfer HTTP/1.1<br>
+              Host: banco.com<br>
+              Content-Type: application/x-www-form-urlencoded<br>
+              Cookie: session=abc123<br>
+              <br>
+              to=1234567890&amount=100&currency=EUR
+            </code>
+          </div>
+          
+          <div class="code-example">
+            <strong>Payload malicioso:</strong>
+            <code>
+              &lt;form action="https://banco.com/transfer" method="POST"&gt;<br>
+              &nbsp;&nbsp;&lt;input name="to" value="atacante123"&gt;<br>
+              &nbsp;&nbsp;&lt;input name="amount" value="5000"&gt;<br>
+              &nbsp;&nbsp;&lt;input name="currency" value="EUR"&gt;<br>
+              &nbsp;&nbsp;&lt;input type="submit" value="¡Gana $1000!"&gt;<br>
+              &lt;/form&gt;
+            </code>
+          </div>
+        </div>
+        
+        <div class="vulnerability-card">
+          <h4>🔐 Cambio de Contraseña</h4>
+          <p>Ataque para cambiar credenciales de usuario.</p>
+          
+          <div class="code-example">
+            <strong>Payload encubierto:</strong>
+            <code>
+              &lt;img src="https://target.com/change-password?new=hacked123"<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;style="display:none;"&gt;<br>
+              <br>
+              &lt;!-- La imagen "cargará" ejecutando el cambio --&gt;
+            </code>
+          </div>
+        </div>
+        
+        <div class="vulnerability-card">
+          <h4>🛒 Compra Fraudulenta</h4>
+          <p>Realizar compras no autorizadas en e-commerce.</p>
+          
+          <div class="code-example">
+            <strong>JavaScript malicioso:</strong>
+            <code>
+              fetch('https://tienda.com/buy', {<br>
+              &nbsp;&nbsp;method: 'POST',<br>
+              &nbsp;&nbsp;credentials: 'include',<br>
+              &nbsp;&nbsp;headers: {<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;'Content-Type': 'application/json'<br>
+              &nbsp;&nbsp;},<br>
+              &nbsp;&nbsp;body: JSON.stringify({<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;product: 'expensive_item',<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;quantity: 10<br>
+              &nbsp;&nbsp;})<br>
+              });
+            </code>
+          </div>
+        </div>
+        
+        <div class="mitigation-card">
+          <h4>✅ Implementación Segura</h4>
+          <p>Ejemplo de formulario protegido contra CSRF.</p>
+          
+          <div class="code-example">
+            <strong>Formulario seguro:</strong>
+            <code>
+              &lt;form action="/transfer" method="POST"&gt;<br>
+              &nbsp;&nbsp;&lt;!-- Token Anti-CSRF --&gt;<br>
+              &nbsp;&nbsp;&lt;input type="hidden" name="csrf_token" <br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value="&lt;?= $_SESSION['csrf_token'] ?&gt;"&gt;<br>
+              &nbsp;&nbsp;<br>
+              &nbsp;&nbsp;&lt;input name="to" required&gt;<br>
+              &nbsp;&nbsp;&lt;input name="amount" type="number" required&gt;<br>
+              &nbsp;&nbsp;&lt;button type="submit"&gt;Transferir&lt;/button&gt;<br>
+              &lt;/form&gt;
+            </code>
+          </div>
+          
+          <div class="code-example">
+            <strong>Validación en servidor:</strong>
+            <code>
+              // Verificar token CSRF<br>
+              if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {<br>
+              &nbsp;&nbsp;die('Token CSRF inválido');<br>
+              }<br>
+              <br>
+              // Verificar origen<br>
+              if ($_SERVER['HTTP_ORIGIN'] !== 'https://mibanco.com') {<br>
+              &nbsp;&nbsp;die('Origen no autorizado');<br>
+              }<br>
+              <br>
+              // Procesar transferencia segura<br>
+              process_transfer($_POST['to'], $_POST['amount']);
+            </code>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- Modal explicación -->
 <div class="modal fade" id="explainModal" tabindex="-1" aria-hidden="true">
@@ -363,10 +1138,28 @@
         
         <h6 class="mt-4 mb-3">Mitigaciones imprescindibles</h6>
         <ul>
-          <li>Tokens CSRF únicos y verificables en cada formulario.</li>
-          <li>Cookies con atributo <code>SameSite=Strict</code>.</li>
-          <li>Verificar cabeceras <code>Origin</code> / <code>Referer</code>.</li>
-          <li>Requerir doble factor o confirmación adicional en operaciones críticas.</li>
+          <li><strong>Tokens CSRF únicos y verificables en cada formulario:</strong></li>
+          <pre>&lt;input type="hidden" name="csrf_token" value="abc123def456"&gt;</pre>
+          
+          <li><strong>Cookies con atributo SameSite:</strong></li>
+          <pre>Set-Cookie: session_id=abc123; SameSite=Strict; Secure; HttpOnly</pre>
+          
+          <li><strong>Verificar cabeceras Origin/Referer en el servidor:</strong></li>
+          <pre>// Ejemplo en el servidor
+if (request.headers.origin !== 'https://securebank.com') {
+  return error('Origen no autorizado');
+}</pre>
+          
+          <li><strong>Cabeceras de seguridad adicionales:</strong></li>
+          <pre>Content-Security-Policy: default-src 'self'
+X-Frame-Options: DENY
+X-Content-Type-Options: nosniff
+Referrer-Policy: strict-origin-when-cross-origin</pre>
+          
+          <li><strong>Validación de doble factor para operaciones críticas</strong></li>
+          <li><strong>Configuración de CORS restrictiva:</strong></li>
+          <pre>Access-Control-Allow-Origin: https://securebank.com
+Access-Control-Allow-Credentials: true</pre>
         </ul>
       </div>
       <div class="modal-footer">
@@ -378,7 +1171,60 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-// ------- Estado y utilidades -------
+// ------- Navegación entre páginas -------
+document.addEventListener('DOMContentLoaded', function() {
+  // Manejar navegación entre páginas
+  document.querySelectorAll('.nav-button').forEach(button => {
+    button.addEventListener('click', function() {
+      const targetPage = this.getAttribute('data-page');
+      switchPage(targetPage);
+      
+      // Actualizar botones activos
+      document.querySelectorAll('.nav-button').forEach(btn => btn.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+  
+  // Manejar navegación del centro de aprendizaje
+  document.querySelectorAll('.learning-nav-button').forEach(button => {
+    button.addEventListener('click', function() {
+      const targetSection = this.getAttribute('data-section');
+      switchLearningSection(targetSection);
+      
+      // Actualizar botones activos
+      document.querySelectorAll('.learning-nav-button').forEach(btn => btn.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+});
+
+function switchPage(pageId) {
+  // Ocultar todas las páginas
+  document.querySelectorAll('.page').forEach(page => {
+    page.classList.remove('active');
+  });
+  
+  // Mostrar la página seleccionada
+  const targetPage = document.getElementById(pageId + '-page');
+  if (targetPage) {
+    targetPage.classList.add('active');
+  }
+}
+
+function switchLearningSection(sectionId) {
+  // Ocultar todas las secciones
+  document.querySelectorAll('.theory-section').forEach(section => {
+    section.classList.remove('active');
+  });
+  
+  // Mostrar la sección seleccionada
+  const targetSection = document.getElementById(sectionId);
+  if (targetSection) {
+    targetSection.classList.add('active');
+  }
+}
+
+// ------- Código del simulador existente -------
 let balance = 5000;
 const balanceText = document.getElementById('balanceText');
 const historyBody = document.querySelector('#history tbody');
@@ -396,6 +1242,12 @@ function dollar(n) {
   return `$${n.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
 }
 
+function formatMessage(text) {
+  // Convertir **texto** a <strong>texto</strong>
+  // Usar expresión regular global para capturar todos los casos
+  return text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+}
+
 function addBubble(text, right = false) {
   const div = document.createElement('div');
   div.className = `bubble ${right ? 'right-bub' : 'left-bub'}`;
@@ -406,7 +1258,7 @@ function addBubble(text, right = false) {
   });
   
   div.innerHTML = `
-    <div>${text}</div>
+    <div>${formatMessage(text)}</div>
     <div class="chat-time">${messageTime}</div>
   `;
   
@@ -424,7 +1276,7 @@ function addSystemBubble(text) {
   });
   
   div.innerHTML = `
-    <div>${text}</div>
+    <div>${formatMessage(text)}</div>
     <div class="chat-time">${messageTime}</div>
   `;
   
@@ -442,7 +1294,7 @@ function addAppBubble(text) {
   });
   
   div.innerHTML = `
-    <div>${text}</div>
+    <div>${formatMessage(text)}</div>
     <div class="chat-time">${messageTime}</div>
   `;
   
@@ -451,6 +1303,8 @@ function addAppBubble(text) {
 }
 
 // Función expandChat eliminada - ya no es necesaria
+
+
 
 function logTransfer(to, amount, csrf = false) {
   const tr = document.createElement('tr');
