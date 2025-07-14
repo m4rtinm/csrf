@@ -19,7 +19,7 @@
       width:100%;
       position: sticky;
       top: 0;
-      z-index: 100;
+      z-index: 1000;
     }
     
     .main-header .container-fluid {
@@ -59,6 +59,18 @@
     .nav-button.active {
       background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
       border-color: #2563eb;
+    }
+    
+    /* Estilo específico para el modo desafío activo */
+    .nav-button.challenge-active {
+      background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
+      border-color: #f59e0b;
+      color: white;
+    }
+    
+    .nav-button.challenge-active:hover {
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+      transform: translateY(-2px);
     }
     
     /* Páginas */
@@ -420,6 +432,177 @@
     .btn-attack:hover{background:linear-gradient(135deg,#ef4444 0%,#f87171 100%);transform:translateY(-1px);box-shadow:0 4px 20px rgba(220,38,38,.5);color:white;}
     .btn-secondary{background:linear-gradient(135deg,#6b7280 0%,#9ca3af 100%);border:none;padding:.75rem 1.25rem;font-weight:600;border-radius:.5rem;font-size:.95rem;transition:all .2s;color:white;}
     .btn-secondary:hover{background:linear-gradient(135deg,#9ca3af 0%,#d1d5db 100%);transform:translateY(-1px);color:#1f1f1f;}
+    .btn-warning{background:linear-gradient(135deg,#f59e0b 0%,#f97316 100%);border:none;padding:.75rem 1.25rem;font-weight:600;border-radius:.5rem;font-size:.95rem;transition:all .2s;color:white;}
+    .btn-warning:hover{background:linear-gradient(135deg,#f97316 0%,#fb923c 100%);transform:translateY(-1px);box-shadow:0 4px 20px rgba(245,158,11,.5);color:white;}
+    .btn-success{background:linear-gradient(135deg,#22c55e 0%,#16a34a 100%);border:none;padding:.75rem 1.25rem;font-weight:600;border-radius:.5rem;font-size:.95rem;transition:all .2s;color:white;}
+    .btn-success:hover{background:linear-gradient(135deg,#16a34a 0%,#15803d 100%);transform:translateY(-1px);box-shadow:0 4px 20px rgba(34,197,94,.5);color:white;}
+    
+    /* Estilos para el modo desafío */
+    .challenge-mode {
+      border: 2px solid #f59e0b;
+      animation: challengeGlow 2s ease-in-out infinite alternate;
+      position: relative;
+      overflow: visible;
+    }
+    
+    .challenge-mode::before {
+      content: "🎯 MODO DESAFÍO";
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
+      color: white;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      z-index: 500;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+      box-shadow: 0 2px 8px rgba(245,158,11,0.4);
+      white-space: nowrap;
+    }
+    
+    @keyframes challengeGlow {
+      from {
+        box-shadow: 0 0 20px rgba(245,158,11,0.3);
+      }
+      to {
+        box-shadow: 0 0 30px rgba(245,158,11,0.6);
+      }
+    }
+    
+    .challenge-header {
+      background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+      color: white;
+      padding: 1rem;
+      margin: -1rem -1rem 1rem -1rem;
+      border-radius: 0.5rem 0.5rem 0 0;
+      font-weight: 600;
+      text-align: center;
+      animation: challengePulse 3s ease-in-out infinite;
+    }
+    
+    @keyframes challengePulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+    }
+    
+    .challenge-target {
+      background: rgba(245,158,11,0.1);
+      border: 1px solid rgba(245,158,11,0.3);
+      border-radius: 0.5rem;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .challenge-payload {
+      min-height: 150px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      background: #1f2937;
+      color: #10b981;
+      border: 1px solid #374151;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      resize: vertical;
+    }
+    
+    .challenge-payload::placeholder {
+      color: #6b7280;
+    }
+    
+    .challenge-result {
+      padding: 1rem;
+      border-radius: 0.5rem;
+      margin-top: 1rem;
+      font-weight: 600;
+      text-align: center;
+      animation: resultSlide 0.5s ease-out;
+    }
+    
+    .challenge-result.success {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      border: 2px solid #10b981;
+    }
+    
+    .challenge-result.error {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: white;
+      border: 2px solid #ef4444;
+    }
+    
+    @keyframes resultSlide {
+      from {
+        transform: translateY(-20px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    
+    .challenge-header {
+      background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
+      color: white;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      margin-bottom: 1rem;
+      text-align: center;
+      font-weight: 600;
+    }
+    
+    .challenge-target {
+      background: #1a1a1a;
+      border: 1px solid #f59e0b;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+    
+    .challenge-target h6 {
+      color: #f59e0b;
+      margin-bottom: 0.5rem;
+    }
+    
+    .challenge-payload {
+      background: #0a0a0a;
+      color: #ffffff;
+      font-family: 'Fira Code', Monaco, Consolas, monospace;
+      font-size: 0.85rem;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      border: 1px solid #f59e0b;
+      min-height: 120px;
+      resize: vertical;
+    }
+    
+    .challenge-payload:focus {
+      outline: none;
+      border-color: #f97316;
+      box-shadow: 0 0 0 3px rgba(245,158,11,0.3);
+    }
+    
+    .challenge-result {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      font-weight: 500;
+      text-align: center;
+      display: none;
+    }
+    
+    .challenge-result.success {
+      background: #22c55e;
+      color: white;
+    }
+    
+    .challenge-result.error {
+      background: #ef4444;
+      color: white;
+    }
     .codebox{background:#0a0a0a;color:#00ff88;font-family:'Fira Code',Monaco,Consolas,monospace;font-size:.85rem;padding:1rem;border-radius:.5rem;white-space:pre-wrap;min-height:80px;border:1px solid #404040;box-shadow:inset 0 2px 4px rgba(0,0,0,.4);overflow-x:auto;word-break:break-all;}
     .codebox-green{color:#00ff88;}
     .info-box{background:#1a1a1a;border:1px solid #2563eb;border-left:4px solid #3b82f6;padding:1rem;margin-bottom:1rem;border-radius:.5rem;font-size:.9rem;}
@@ -437,30 +620,60 @@
     .app-bub{background:#f3e5f5;border:1px solid #9c27b0;color:#4a148c;margin:0 auto;max-width:95%;font-size:.9rem;border-radius:12px;text-align:center;font-style:italic;}
     .left-bub::before{content:'';position:absolute;top:0;left:-8px;width:0;height:0;border-top:8px solid transparent;border-right:8px solid #ffffff;border-bottom:8px solid transparent;}
     .right-bub::before{content:'';position:absolute;top:0;right:-8px;width:0;height:0;border-top:8px solid transparent;border-left:8px solid #dcf8c6;border-bottom:8px solid transparent;}
-    .chat-container{background:#e5ddd5;border-radius:.75rem;padding:1rem;overflow-y:auto;border:1px solid #404040;background-image:url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="chat-pattern" patternUnits="userSpaceOnUse" width="50" height="50"><circle cx="25" cy="25" r="1" fill="%23ffffff" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23chat-pattern)"/></svg>');flex:1;max-height:calc(100vh - 350px);}
-    .chat-card{overflow:hidden;min-height:auto;display:flex;flex-direction:column;}
+    .chat-container{background:#e5ddd5;border-radius:.75rem;padding:1rem;overflow-y:auto;border:1px solid #404040;background-image:url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="chat-pattern" patternUnits="userSpaceOnUse" width="50" height="50"><circle cx="25" cy="25" r="1" fill="%23ffffff" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23chat-pattern)"/></svg>');flex:1;max-height:calc(100vh - 200px);}
+    .chat-card{overflow:hidden;display:flex;flex-direction:column;}
     .chat-card .card-body{flex:1;display:flex;flex-direction:column;}
     
-    /* Ajustar la altura del chat según el tamaño de pantalla */
+    /* Asegurar que todas las tarjetas tengan la misma altura dinámicamente */
+    .main-container .row {
+      display: flex;
+      align-items: stretch;
+    }
+    
+    .main-container .col-12 {
+      display: flex;
+    }
+    
+    .main-container .card {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .main-container .card-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* El chat se adapta dinámicamente a la altura de las otras columnas */
+    .chat-card .card-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+    
+    .chat-container {
+      flex: 1;
+      min-height: 0;
+    }
+    
+    /* Ajustar solo los tamaños mínimos según el tamaño de pantalla */
     @media (min-width: 1200px) {
-      .chat-container{flex:1;max-height:calc(100vh - 300px);}
-      .chat-card{display:flex;flex-direction:column;}
-      .chat-card .card-body{flex:1;display:flex;flex-direction:column;}
       .card{min-height:550px;}
+      .chat-container{max-height:calc(100vh - 180px);}
       .balance-amount{font-size:2.4rem;}
       .info-box{font-size:.95rem;}
       .codebox{font-size:.9rem;}
     }
     @media (min-width: 992px) and (max-width: 1199px) {
-      .chat-container{flex:1;max-height:calc(100vh - 320px);}
-      .chat-card{display:flex;flex-direction:column;}
-      .chat-card .card-body{flex:1;display:flex;flex-direction:column;}
+      .card{min-height:500px;}
+      .chat-container{max-height:calc(100vh - 200px);}
     }
     @media (max-width: 991px) {
-      .chat-container{flex:1;max-height:calc(100vh - 350px);}
-      .chat-card{display:flex;flex-direction:column;}
-      .chat-card .card-body{flex:1;display:flex;flex-direction:column;}
-      .card{min-height:auto;}
+      .card{min-height:450px;}
+      .chat-container{max-height:calc(100vh - 220px);}
     }
     .history-table{font-size:.8rem;margin-bottom:0;color:#ffffff;}
     .history-table th{background:#0f172a;border-bottom:2px solid #475569;font-weight:600;color:#f1f5f9;padding:.75rem .5rem;font-size:.75rem;}
@@ -534,6 +747,9 @@
         <button class="nav-button" data-page="learning">
           📚 Centro de Aprendizaje
         </button>
+        <button class="nav-button" id="challengeNavBtn">
+          🎯 Modo Desafío
+        </button>
       </div>
     </div>
   </div>
@@ -553,30 +769,67 @@
           <span class="session-badge">Sesión activa</span>
         </div>
         <div class="card-body">
-          <div class="balance-box">
-            <div class="small mb-2">Saldo Disponible</div>
-            <div id="balanceText" class="balance-amount">$5,000.00</div>
-            <div class="account-info">Cuenta: **** **** **** 4321</div>
+          <!-- Contenido normal del usuario -->
+          <div id="userNormalContent">
+            <div class="balance-box">
+              <div class="small mb-2">Saldo Disponible</div>
+              <div id="balanceText" class="balance-amount">$5,000.00</div>
+              <div class="account-info">Cuenta: **** **** **** 4321</div>
+            </div>
+
+            <div class="form-section">
+              <h6><i class="bi bi-arrow-right-circle me-2"></i>Realizar transferencia</h6>
+              <div class="mb-3">
+                <label class="form-label">Cuenta destino</label>
+                <input id="to" class="form-control" placeholder="4000-1234-5678-9999" value="4000-1234-5678-9999"/>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Cantidad ($)</label>
+                <input id="amount" type="number" min="1" class="form-control" value="100"/>
+              </div>
+              <button id="transferBtn" class="btn btn-transfer w-100">
+                <i class="bi bi-send me-2"></i>Transferir
+              </button>
+            </div>
+
+            <div id="transferMsg" class="transfer-msg" style="display:none;"></div>
+          </div>
+          
+          <!-- Contenido del modo desafío -->
+          <div id="userChallengeContent" style="display:none;">
+            <div class="balance-box" style="background:linear-gradient(135deg,#f59e0b 0%,#f97316 100%);">
+              <div class="small mb-2">Perfil de Usuario</div>
+              <div class="balance-amount" style="font-size:1.8rem;">👤 JohnDoe</div>
+              <div class="account-info">Usuario: john.doe@securebank.com</div>
+            </div>
+
+            <div class="form-section">
+              <h6><i class="bi bi-shield-lock me-2"></i>Configuración de Seguridad</h6>
+              <div class="mb-3">
+                <label class="form-label">Contraseña actual</label>
+                <input id="currentPassword" class="form-control" type="password" placeholder="Ingresa tu contraseña actual"/>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Nueva contraseña</label>
+                <input id="newPassword" class="form-control" type="password" placeholder="Ingresa nueva contraseña"/>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Confirmar contraseña</label>
+                <input id="confirmPassword" class="form-control" type="password" placeholder="Confirma tu nueva contraseña"/>
+              </div>
+              <button id="changePasswordBtn" class="btn btn-warning w-100">
+                <i class="bi bi-lock me-2"></i>Cambiar Contraseña
+              </button>
+            </div>
+
+            <div class="info-box">
+              <strong>Estado del usuario:</strong><br/>
+              El usuario está navegando por su perfil de seguridad. Es vulnerable a ataques CSRF si visita una página maliciosa mientras está autenticado.
+            </div>
           </div>
 
-          <div class="form-section">
-            <h6><i class="bi bi-arrow-right-circle me-2"></i>Realizar transferencia</h6>
-            <div class="mb-3">
-              <label class="form-label">Cuenta destino</label>
-              <input id="to" class="form-control" placeholder="4000-1234-5678-9999" value="4000-1234-5678-9999"/>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Cantidad ($)</label>
-              <input id="amount" type="number" min="1" class="form-control" value="100"/>
-            </div>
-            <button id="transferBtn" class="btn btn-transfer w-100">
-              <i class="bi bi-send me-2"></i>Transferir
-            </button>
-          </div>
-
-          <div id="transferMsg" class="transfer-msg" style="display:none;"></div>
-
-          <div class="form-section">
+          <!-- Historial solo visible en modo normal -->
+          <div id="historialSection" class="form-section">
             <h6><i class="bi bi-clock-history me-2"></i>Historial de transferencias</h6>
             <div class="table-responsive">
               <table class="table table-sm history-table" id="history">
@@ -605,7 +858,7 @@
           <div id="captureBox" class="codebox mb-3">Esperando transferencia del usuario…</div>
           
           <div class="mb-3">
-            <label class="form-label">Cantidad a robar ($)</label>
+            <label class="form-label">Cantidad ($)</label>
             <input id="stealAmount" type="number" min="1" class="form-control amount-input" value="1500" placeholder="Ingresa la cantidad"/>
           </div>
           
@@ -627,6 +880,34 @@
           <button id="explainBtn" class="btn btn-secondary w-100 mb-3" style="display:none;">
             <i class="bi bi-question-circle me-2"></i>¿Cómo funciona el exploit?
           </button>
+          <button id="challengeBtn" class="btn btn-warning w-100 mb-3" style="display:none;">
+            <i class="bi bi-trophy me-2"></i>¡Ahora te toca a ti!
+          </button>
+          
+          <!-- Contenido del desafío -->
+          <div id="challengeContent" style="display:none;">
+            <div class="challenge-header">
+              <i class="bi bi-target me-2"></i>DESAFÍO: Crea tu propio ataque CSRF
+            </div>
+            
+            <div class="challenge-target">
+              <h6><i class="bi bi-bullseye me-2"></i>Objetivo Capturado</h6>
+              <div id="challengeTargetBox" class="codebox mb-3">
+                <!-- Aquí aparecerá la nueva solicitud objetivo -->
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label"><i class="bi bi-code-slash me-2"></i>Crea tu payload CSRF:</label>
+              <textarea id="challengePayload" class="challenge-payload w-100" placeholder="Escribe tu formulario HTML malicioso aquí..."></textarea>
+            </div>
+            
+            <button id="submitChallenge" class="btn btn-success w-100 mb-3">
+              <i class="bi bi-send me-2"></i>Lanzar Ataque
+            </button>
+            
+            <div id="challengeResult" class="challenge-result"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -1173,15 +1454,89 @@ Access-Control-Allow-Credentials: true</pre>
 <script>
 // ------- Navegación entre páginas -------
 document.addEventListener('DOMContentLoaded', function() {
+  // Función para sincronizar altura del chat con la columna central
+  function syncChatHeight() {
+    const attackerCard = document.querySelector('.attacker-card');
+    const chatContainer = document.querySelector('.chat-container');
+    
+    if (attackerCard && chatContainer) {
+      // Obtener la altura actual de la columna central (atacante)
+      const attackerHeight = attackerCard.offsetHeight;
+      const chatCard = chatContainer.closest('.chat-card');
+      
+      if (chatCard) {
+        // Calcular el padding y margins de la tarjeta del chat
+        const chatCardStyles = window.getComputedStyle(chatCard);
+        const chatCardPadding = parseInt(chatCardStyles.paddingTop) + parseInt(chatCardStyles.paddingBottom);
+        const chatCardMargin = parseInt(chatCardStyles.marginTop) + parseInt(chatCardStyles.marginBottom);
+        
+        // Calcular el padding del contenedor del chat
+        const chatContainerStyles = window.getComputedStyle(chatContainer);
+        const chatContainerPadding = parseInt(chatContainerStyles.paddingTop) + parseInt(chatContainerStyles.paddingBottom);
+        
+        // Calcular la altura máxima disponible para el chat
+        const availableHeight = attackerHeight - chatCardPadding - chatContainerPadding -  60; // 60px para el header
+        
+        // Establecer la altura máxima del chat
+        chatContainer.style.maxHeight = `${availableHeight}px`;
+      }
+    }
+  }
+  
+  // Ejecutar la sincronización inicialmente
+  syncChatHeight();
+  
+  // Ejecutar la sincronización cuando cambie el tamaño de la ventana
+  window.addEventListener('resize', syncChatHeight);
+  
+  // Ejecutar la sincronización cuando se añadan nuevos elementos al DOM
+  const observer = new MutationObserver(function() {
+    setTimeout(syncChatHeight, 100); // Pequeño delay para que el DOM se actualice
+  });
+  
+  // Observar cambios en el contenido de las tarjetas
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+
   // Manejar navegación entre páginas
   document.querySelectorAll('.nav-button').forEach(button => {
     button.addEventListener('click', function() {
       const targetPage = this.getAttribute('data-page');
-      switchPage(targetPage);
       
-      // Actualizar botones activos
-      document.querySelectorAll('.nav-button').forEach(btn => btn.classList.remove('active'));
-      this.classList.add('active');
+      // Manejar botón especial de modo desafío
+      if (this.id === 'challengeNavBtn') {
+        // Cambiar a la página del simulador si no está ya activa
+        if (!document.getElementById('simulator-page').classList.contains('active')) {
+          switchPage('simulator');
+        }
+        
+        // Activar directamente el modo desafío
+        startChallenge();
+        
+        // Actualizar botones activos - modo desafío
+        document.querySelectorAll('.nav-button').forEach(btn => {
+          btn.classList.remove('active', 'challenge-active');
+        });
+        document.getElementById('challengeNavBtn').classList.add('challenge-active');
+        return;
+      }
+      
+      if (targetPage) {
+        // Si se está en modo desafío y se hace clic en "Simulador", resetear el modo desafío
+        if (challengeMode && targetPage === 'simulator') {
+          resetChallenge();
+        }
+        
+        switchPage(targetPage);
+        
+        // Actualizar botones activos - modo normal
+        document.querySelectorAll('.nav-button').forEach(btn => {
+          btn.classList.remove('active', 'challenge-active');
+        });
+        this.classList.add('active');
+      }
     });
   });
   
@@ -1236,7 +1591,15 @@ const explainBtn = document.getElementById('explainBtn');
 const transferBtn = document.getElementById('transferBtn');
 const sendAttack = document.getElementById('sendAttack');
 const sendPhishing = document.getElementById('sendPhishing');
+const challengeBtn = document.getElementById('challengeBtn');
+const challengeContent = document.getElementById('challengeContent');
+const challengeTargetBox = document.getElementById('challengeTargetBox');
+const challengePayload = document.getElementById('challengePayload');
+const submitChallenge = document.getElementById('submitChallenge');
+const challengeResult = document.getElementById('challengeResult');
 let captured = null;
+let challengeMode = false;
+let challengeTarget = null;
 
 function dollar(n) {
   return `$${n.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
@@ -1257,8 +1620,10 @@ function addBubble(text, right = false) {
     minute: '2-digit' 
   });
   
+  const sender = right ? '👤 Víctima' : '🕵️ Atacante';
+  
   div.innerHTML = `
-    <div>${formatMessage(text)}</div>
+    <div><strong>${sender}:</strong> ${formatMessage(text)}</div>
     <div class="chat-time">${messageTime}</div>
   `;
   
@@ -1276,7 +1641,7 @@ function addSystemBubble(text) {
   });
   
   div.innerHTML = `
-    <div>${formatMessage(text)}</div>
+    <div><strong>🏦 Sistema:</strong> ${formatMessage(text)}</div>
     <div class="chat-time">${messageTime}</div>
   `;
   
@@ -1294,7 +1659,25 @@ function addAppBubble(text) {
   });
   
   div.innerHTML = `
-    <div>${formatMessage(text)}</div>
+    <div><strong>🎓 Instructor:</strong> ${formatMessage(text)}</div>
+    <div class="chat-time">${messageTime}</div>
+  `;
+  
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function addBankBubble(text) {
+  const div = document.createElement('div');
+  div.className = 'bubble left-bub';
+  
+  const messageTime = new Date().toLocaleTimeString('es-ES', { 
+    hour: '2-digit', 
+    minute: '2-digit' 
+  });
+  
+  div.innerHTML = `
+    <div><strong>🏦 Banco:</strong> ${formatMessage(text)}</div>
     <div class="chat-time">${messageTime}</div>
   `;
   
@@ -1380,9 +1763,86 @@ Referer: https://securebank.com/dashboard
   // NO generar PoC automáticamente, solo cuando el atacante presione el botón
   pocBox.textContent = '// Presiona "Generar payload malicioso" para crear el exploit';
   
-  addBubble('✅ Transferencia realizada exitosamente. El dinero ha sido enviado a la cuenta especificada.', true);
+  addBankBubble('✅ Transferencia realizada exitosamente. El dinero ha sido enviado a la cuenta especificada.');
   addBubble('😊 ¡Perfecto! Mi cuenta sigue segura con SecureBank.', true);
 });
+
+// ------- Botón de cambio de contraseña en modo desafío -------
+const changePasswordBtn = document.getElementById('changePasswordBtn');
+changePasswordBtn.addEventListener('click', () => {
+  if (!challengeMode) return;
+  
+  const currentPassword = document.getElementById('currentPassword').value;
+  const newPassword = document.getElementById('newPassword').value;
+  const confirmPassword = document.getElementById('confirmPassword').value;
+  
+  if (!currentPassword || !newPassword || !confirmPassword) {
+    addBubble('❌ Por favor completa todos los campos de contraseña.', true);
+    return;
+  }
+  
+  if (newPassword !== confirmPassword) {
+    addBubble('❌ Las contraseñas no coinciden.', true);
+    return;
+  }
+  
+  // Capturar la solicitud solo en modo desafío
+  capturePasswordChangeRequest(currentPassword, newPassword);
+  
+  // Simular cambio exitoso
+  addBankBubble('✅ Contraseña cambiada exitosamente. Tu cuenta está ahora más segura.');
+  addBubble('🔐 Perfecto, he actualizado mi contraseña. Ahora mi cuenta está protegida.', true);
+  
+  // Limpiar campos
+  document.getElementById('currentPassword').value = '';
+  document.getElementById('newPassword').value = '';
+  document.getElementById('confirmPassword').value = '';
+});
+
+function capturePasswordChangeRequest(currentPassword, newPassword) {
+  const jwtToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
+  const sessionId = 'sess_' + Math.random().toString(36).substring(2, 15);
+  const victimEmail = 'john.doe@securebank.com';
+  
+  const challengeCapture = `POST /change-password HTTP/1.1
+Host: securebank.com
+Content-Type: application/x-www-form-urlencoded
+Cookie: session=${sessionId}; auth=valid
+Origin: https://securebank.com
+Referer: https://securebank.com/profile
+X-User-Email: ${victimEmail}
+
+current_password=${currentPassword}&new_password=${newPassword}&confirm_password=${newPassword}&user_email=${victimEmail}`;
+  
+  // Mostrar la captura en el chat del sistema
+  addSystemBubble('📡 **Solicitud capturada del usuario:** El usuario ha cambiado su contraseña. El atacante ahora puede ver la estructura de la solicitud HTTP y el email de la víctima.');
+  
+  // Mensajes del atacante simulando el análisis
+  setTimeout(() => {
+    addBubble('🕵️ ¡Perfecto! He interceptado la solicitud de cambio de contraseña.', false);
+  }, 1000);
+  
+  setTimeout(() => {
+    addBubble(`📧 Excelente, también capturé el email de la víctima: ${victimEmail}`, false);
+  }, 2500);
+  
+  setTimeout(() => {
+    addBubble('🔍 Déjame analizar la estructura: método POST, URL /change-password, y los parámetros necesarios...', false);
+  }, 4000);
+  
+  setTimeout(() => {
+    addBubble('💡 Ya tengo toda la información que necesito. Ahora puedo crear un formulario malicioso que replique esta acción.', false);
+  }, 5500);
+  
+  setTimeout(() => {
+    addSystemBubble('💡 **Pista:** Analiza la solicitud HTTP capturada. ¿Qué campos son necesarios? ¿Cuál es el método y la URL? Usa esta información para crear tu payload CSRF.');
+  }, 7000);
+  
+  // Actualizar el objetivo del desafío con la solicitud real capturada
+  challengeTarget.request = challengeCapture;
+  challengeTarget.expectedFields = ['current_password', 'new_password', 'confirm_password', 'user_email'];
+  challengeTargetBox.textContent = challengeCapture;
+}
 
 // ------- Ataque CSRF -------
 function csrfAttack(e) {
@@ -1400,10 +1860,9 @@ function csrfAttack(e) {
   logTransfer('4001-1234-5678-9999', stealAmount, true);
   
   addBubble(`😈 ¡Transferencia CSRF ejecutada exitosamente! Robé ${dollar(stealAmount)}! Revisa tu saldo...`);
-  addBubble('😱 ¡¿Qué?! ¡Mi dinero! ¿Cómo es posible?', true);
-  
-  showTransferMessage(prevBalance, balance);
-  explainBtn.style.display = 'block';
+  addBubble('😱 ¡¿Qué?! ¡Mi dinero! ¿Cómo es posible?', true);      showTransferMessage(prevBalance, balance);
+      explainBtn.style.display = 'block';
+      challengeBtn.style.display = 'block';
 }
 
 sendAttack.addEventListener('click', () => {
@@ -1432,7 +1891,7 @@ sendAttack.addEventListener('click', () => {
   sendAttack.disabled = true;
   
   // Agregar mensaje informativo del atacante
-  addAppBubble('🔧 Excelente. He generado un formulario malicioso que replicará la transferencia. Ahora necesito engañar a la víctima...');
+  addBubble('🔧 Excelente. He generado un formulario malicioso que replicará la transferencia. Ahora necesito engañar a la víctima...');
 });
 
 // ------- Enviar mensaje de phishing -------
@@ -1482,6 +1941,7 @@ function executeCSRFAttack() {
       
       // Mostrar el botón de explicación después del ataque exitoso
       explainBtn.style.display = 'block';
+      challengeBtn.style.display = 'block';
       
       // Añadir respuesta del cliente después del ataque
       setTimeout(() => {
@@ -1491,13 +1951,13 @@ function executeCSRFAttack() {
           setTimeout(() => {
             addBubble('🚨 ¡Esto es un fraude! ¿Cómo pudieron robar mi dinero solo con hacer clic en un enlace?', true);
             setTimeout(() => {
-              addBubble('🏦 Estimado cliente, nuestro sistema de seguridad ha detectado que acaba de ser víctima de un ataque CSRF (Cross-Site Request Forgery). Le explicamos lo que ocurrió:');
+              addBankBubble('🏦 Estimado cliente, nuestro sistema de seguridad ha detectado que acaba de ser víctima de un ataque CSRF (Cross-Site Request Forgery). Le explicamos lo que ocurrió:');
               setTimeout(() => {
-                addBubble('🔍 **¿Cómo funcionó el ataque?** 1) Usted realizó una transferencia legítima → 2) Un atacante capturó la estructura de su solicitud → 3) El atacante creó un formulario malicioso que replica esa solicitud');
+                addBankBubble('🔍 **¿Cómo funcionó el ataque?** 1) Usted realizó una transferencia legítima → 2) Un atacante capturó la estructura de su solicitud → 3) El atacante creó un formulario malicioso que replica esa solicitud');
                 setTimeout(() => {
-                  addBubble('⚠️ **El problema:** Su navegador envió automáticamente las cookies de sesión con el formulario malicioso, haciendo que nuestro servidor procesara la transferencia como si fuera autorizada por usted.');
+                  addBankBubble('⚠️ **El problema:** Su navegador envió automáticamente las cookies de sesión con el formulario malicioso, haciendo que nuestro servidor procesara la transferencia como si fuera autorizada por usted.');
                   setTimeout(() => {
-                    addBubble('🛡️ **Medidas de protección:** Implementamos tokens CSRF, cookies SameSite=Strict y verificación de origen para prevenir estos ataques. Para más detalles técnicos, <a href="#" onclick="document.getElementById(\'explainBtn\').click(); return false;" style="color: #2563eb; text-decoration: underline; font-weight: 600;">consulte aquí la explicación completa</a>');
+                    addBankBubble('🛡️ **Medidas de protección:** Implementamos tokens CSRF, cookies SameSite=Strict y verificación de origen para prevenir estos ataques. Para más detalles técnicos, <a href="#" onclick="document.getElementById(\'explainBtn\').click(); return false;" style="color: #2563eb; text-decoration: underline; font-weight: 600;">consulte aquí la explicación completa</a>');
                   }, 2000);
                 }, 2500);
               }, 2000);
@@ -1519,14 +1979,15 @@ function executeCSRFAttack() {
       
       // Mostrar explicación incluso si no hay saldo suficiente
       explainBtn.style.display = 'block';
+      challengeBtn.style.display = 'block';
       
       // Explicar el ataque incluso si falló
       setTimeout(() => {
-        addBubble('🏦 Estimado cliente, aunque la transferencia no se completó por saldo insuficiente, nuestro sistema detectó un intento de ataque CSRF. Le explicamos qué ocurrió:');
+        addBankBubble('🏦 Estimado cliente, aunque la transferencia no se completó por saldo insuficiente, nuestro sistema detectó un intento de ataque CSRF. Le explicamos qué ocurrió:');
         setTimeout(() => {
-          addBubble('⚠️ **¿Qué pasó?** Su navegador envió una solicitud de transferencia sin su conocimiento cuando hizo clic en el enlace. Si hubiera tenido más saldo, la transferencia se habría ejecutado.');
+          addBankBubble('⚠️ **¿Qué pasó?** Su navegador envió una solicitud de transferencia sin su conocimiento cuando hizo clic en el enlace. Si hubiera tenido más saldo, la transferencia se habría ejecutado.');
           setTimeout(() => {
-            addBubble('🛡️ **Lección importante:** Nunca haga clic en enlaces sospechosos, incluso si parecen ser de su banco. Para conocer más sobre cómo protegerse, <a href="#" onclick="document.getElementById(\'explainBtn\').click(); return false;" style="color: #2563eb; text-decoration: underline; font-weight: 600;">consulte aquí la explicación completa</a>');
+            addBankBubble('🛡️ **Lección importante:** Nunca haga clic en enlaces sospechosos, incluso si parecen ser de su banco. Para conocer más sobre cómo protegerse, <a href="#" onclick="document.getElementById(\'explainBtn\').click(); return false;" style="color: #2563eb; text-decoration: underline; font-weight: 600;">consulte aquí la explicación completa</a>');
           }, 2500);
         }, 2000);
       }, 2000);
@@ -1534,14 +1995,376 @@ function executeCSRFAttack() {
   }, 2000);
 }
 
-// ------- Mostrar explicación -------
+// ------- Modo Desafío -------
+challengeBtn.addEventListener('click', () => {
+  startChallenge();
+});
+
+submitChallenge.addEventListener('click', () => {
+  validateChallenge();
+});
+
+function startChallenge() {
+  challengeMode = true;
+  
+  // Limpiar el chat completamente
+  const chatContainer = document.querySelector('.chat-container');
+  chatContainer.innerHTML = '';
+  
+  // Cambiar la vista del usuario al modo desafío
+  document.getElementById('userNormalContent').style.display = 'none';
+  document.getElementById('userChallengeContent').style.display = 'block';
+  
+  // Ocultar elementos específicos del atacante que no deben aparecer en modo desafío
+  const attackerElementsToHide = [
+    'captureBox',
+    'sendAttack',
+    'sendPhishing',
+    'pocBox',
+    'explainBtn',
+    'stealAmount'
+  ];
+  
+  attackerElementsToHide.forEach(elementId => {
+    const element = document.getElementById(elementId);
+    if (element) {
+      element.style.display = 'none';
+    }
+  });
+  
+  // Ocultar también las cajas de información del atacante
+  const attackerInfoBoxes = document.querySelectorAll('.attacker-card .info-box');
+  attackerInfoBoxes.forEach(box => {
+    box.style.display = 'none';
+  });
+  
+  // Ocultar headings del atacante normal
+  const attackerHeadings = document.querySelectorAll('.attacker-card h6');
+  attackerHeadings.forEach(heading => {
+    if (!heading.closest('#challengeContent')) {
+      heading.style.display = 'none';
+    }
+  });
+  
+  // Ocultar historial del usuario
+  const historialSection = document.getElementById('historialSection');
+  if (historialSection) {
+    historialSection.style.display = 'none';
+  }
+  
+  // Configurar el objetivo del desafío para cambio de contraseña
+  challengeTarget = {
+    name: 'Cambio de Contraseña',
+    request: `POST /change-password HTTP/1.1
+Host: securebank.com
+Content-Type: application/x-www-form-urlencoded
+Cookie: session=user123; auth=valid
+Origin: https://securebank.com
+Referer: https://securebank.com/profile
+X-User-Email: john.doe@securebank.com
+
+current_password=userpass&new_password=newpass&confirm_password=newpass&user_email=john.doe@securebank.com`,
+    expectedFields: ['current_password', 'new_password', 'confirm_password', 'user_email'],
+    action: '/change-password',
+    method: 'POST'
+  };
+  
+  challengeTargetBox.textContent = 'Esperando que el usuario interactúe con el formulario...';
+  
+  // Mostrar contenido del desafío
+  challengeContent.style.display = 'block';
+  challengeBtn.style.display = 'none';
+  
+  // Añadir efecto visual a las tarjetas
+  document.querySelector('.attacker-card').classList.add('challenge-mode');
+  document.querySelector('.user-card').classList.add('challenge-mode');
+  
+  // Mensajes iniciales del desafío
+  addSystemBubble('🎯 **¡DESAFÍO ACTIVADO!** Ahora eres el atacante. Tu objetivo es crear un payload CSRF que explote la funcionalidad del usuario.');
+  addSystemBubble('📋 **Instrucciones:** El usuario está navegando en su perfil. Cuando haga clic en "Cambiar Contraseña", capturarás la solicitud HTTP. Usa esa información para crear tu ataque.');
+  addBubble('🎓 Es mi turno de ser el atacante. Voy a crear un payload CSRF malicioso...', false);
+  addBubble('🔍 Primero necesito que el usuario interactúe con el formulario para capturar la solicitud.', false);
+}
+
+function generateChallengeTarget() {
+  const scenarios = [
+    {
+      name: 'Cambio de Contraseña',
+      request: `POST /change-password HTTP/1.1
+Host: securebank.com
+Content-Type: application/x-www-form-urlencoded
+Cookie: session=user123; auth=valid
+Origin: https://securebank.com
+Referer: https://securebank.com/profile
+
+current_password=oldpass123&new_password=newpass456&confirm_password=newpass456`,
+      expectedFields: ['current_password', 'new_password', 'confirm_password'],
+      action: '/change-password',
+      method: 'POST'
+    },
+    {
+      name: 'Cambio de Email',
+      request: `POST /update-email HTTP/1.1
+Host: securebank.com
+Content-Type: application/x-www-form-urlencoded
+Cookie: session=user123; auth=valid
+Origin: https://securebank.com
+Referer: https://securebank.com/profile
+
+email=newemail@attacker.com&confirm_email=newemail@attacker.com`,
+      expectedFields: ['email', 'confirm_email'],
+      action: '/update-email',
+      method: 'POST'
+    },
+    {
+      name: 'Eliminación de Cuenta',
+      request: `POST /delete-account HTTP/1.1
+Host: securebank.com
+Content-Type: application/x-www-form-urlencoded
+Cookie: session=user123; auth=valid
+Origin: https://securebank.com
+Referer: https://securebank.com/settings
+
+confirmation=DELETE&password=userpass123`,
+      expectedFields: ['confirmation', 'password'],
+      action: '/delete-account',
+      method: 'POST'
+    }
+  ];
+  
+  return scenarios[Math.floor(Math.random() * scenarios.length)];
+}
+
+function validateChallenge() {
+  const payload = challengePayload.value.trim();
+  const result = challengeResult;
+  
+  if (!payload) {
+    showChallengeResult('error', '❌ Debes escribir un payload CSRF válido.');
+    addBubble('🤔 Hmm, parece que necesito escribir algo en el campo de payload.', false);
+    return;
+  }
+  
+  // Validaciones básicas
+  const validations = [
+    {
+      check: payload.includes('<form'),
+      message: 'El payload debe contener un elemento <form>',
+      hint: 'Un ataque CSRF necesita un formulario HTML para enviar la solicitud.'
+    },
+    {
+      check: payload.includes(challengeTarget.action) || payload.includes('https://securebank.com' + challengeTarget.action),
+      message: `El formulario debe apuntar a ${challengeTarget.action} o https://securebank.com${challengeTarget.action}`,
+      hint: 'El atributo "action" debe coincidir con la URL de la solicitud capturada (puede ser ruta relativa o URL completa).'
+    },
+    {
+      check: payload.includes('method="POST"') || payload.includes("method='POST'"),
+      message: 'El formulario debe usar method="POST"',
+      hint: 'El método HTTP debe coincidir con la solicitud original.'
+    },
+    {
+      check: challengeTarget.expectedFields.every(field => payload.includes(`name="${field}"`) || payload.includes(`name='${field}'`)),
+      message: `El formulario debe incluir todos los campos: ${challengeTarget.expectedFields.join(', ')}`,
+      hint: 'Todos los parámetros de la solicitud original deben estar presentes como campos del formulario.'
+    }
+  ];
+  
+  for (let validation of validations) {
+    if (!validation.check) {
+      showChallengeResult('error', `❌ ${validation.message}`);
+      addBubble(`💭 ${validation.hint}`, false);
+      return;
+    }
+  }
+  
+  // Si pasa todas las validaciones
+  showChallengeResult('success', '🎉 ¡Excelente! Has creado un payload CSRF válido. Iniciando simulación del ataque...');
+  
+  // Simular el ataque completo
+  simulateCSRFAttack();
+}
+
+function simulateCSRFAttack() {
+  // Mensajes del atacante sobre el ataque
+  addBubble('🎯 ¡Perfecto! Mi payload CSRF es válido.', false);
+  
+  setTimeout(() => {
+    addBubble('📧 Ahora voy a enviar un enlace malicioso a la víctima john.doe@securebank.com', false);
+  }, 1500);
+  
+  setTimeout(() => {
+    addBubble('📱 Enviando mensaje: "¡Felicidades! Has ganado un premio. Haz clic aquí: <a href="#" onclick="executeChallengeAttack(); return false;" style="color: #3b82f6; text-decoration: underline; font-weight: 600;">http://attacker.com/prize</a>"', false);
+  }, 3000);
+  
+  setTimeout(() => {
+    addSystemBubble('📨 **Mensaje enviado a la víctima:** El atacante ha enviado un enlace malicioso que contiene el payload CSRF.');
+  }, 4500);
+  
+  // Mensajes de la víctima
+  setTimeout(() => {
+    addBubble('📧 ¡Wow! ¡He recibido un mensaje sobre un premio!', true);
+  }, 6000);
+  
+  setTimeout(() => {
+    addBubble('🤔 Déjame hacer clic en el enlace para ver qué premio gané... <a href="#" onclick="executeChallengeAttack(); return false;" style="color: #3b82f6; text-decoration: underline; font-weight: 600;">http://attacker.com/prize</a>', true);
+  }, 7500);
+  
+  setTimeout(() => {
+    addSystemBubble('⏳ **Esperando tu interacción:** Haz clic en el enlace malicioso para ver cómo se ejecuta el ataque CSRF en tiempo real.');
+  }, 9000);
+  
+  setTimeout(() => {
+    addSystemBubble('👆 **Pista:** El enlace azul es cliqueable. Haz clic en él para simular que la víctima cae en la trampa del atacante.');
+  }, 11000);
+}
+
+// ------- Ejecutar ataque CSRF en modo desafío -------
+function executeChallengeAttack() {
+  // Confirmar que el usuario real hizo clic
+  addSystemBubble('🖱️ **¡USUARIO REAL HIZO CLIC!** Has simulado que la víctima hace clic en el enlace malicioso.');
+  
+  addBubble('🖱️ *Haciendo clic en el enlace malicioso*', true);
+  
+  setTimeout(() => {
+    addBubble('🌐 Cargando página del premio...', true);
+  }, 1000);
+  
+  setTimeout(() => {
+    addSystemBubble('⚡ **¡ATAQUE CSRF EJECUTADO!** El navegador de la víctima ha enviado automáticamente la solicitud de cambio de contraseña sin su conocimiento.');
+  }, 2500);
+  
+  setTimeout(() => {
+    addBubble('🔄 *El formulario CSRF se ejecuta en segundo plano*', true);
+  }, 4000);
+  
+  // Cambio de contraseña ejecutado
+  setTimeout(() => {
+    addBankBubble('✅ **Contraseña cambiada con éxito** - Tu nueva contraseña ha sido actualizada.');
+  }, 5500);
+  
+  setTimeout(() => {
+    addBubble('😕 ¿Eh? ¿Qué contraseña? Yo solo hice clic en un enlace de un premio...', true);
+  }, 7000);
+  
+  setTimeout(() => {
+    addBubble('😨 ¡Espera! ¿Alguien cambió mi contraseña sin mi permiso?', true);
+  }, 8500);
+  
+  setTimeout(() => {
+    addBubble('😡 ¡HE SIDO HACKEADO! ¡Alguien tiene acceso a mi cuenta!', true);
+  }, 10000);
+  
+  setTimeout(() => {
+    addBubble('🚨 ¡BANCO SECUREBANK! ¡Mi cuenta ha sido comprometida! ¡Necesito ayuda urgente!', true);
+  }, 11500);
+  
+  // Mensaje del atacante triunfante
+  setTimeout(() => {
+    addBubble('😈 ¡Misión cumplida! He logrado cambiar la contraseña de la víctima usando CSRF.', false);
+  }, 13000);
+  
+  setTimeout(() => {
+    addBubble('🎯 La víctima nunca sospechó que mi enlace "inocente" ejecutaría acciones en su cuenta bancaria.', false);
+  }, 14500);
+  
+  setTimeout(() => {
+    addSystemBubble('🎓 **LECCIÓN APRENDIDA:** Así es como funciona un ataque CSRF real. Un simple clic en un enlace malicioso puede comprometer completamente una cuenta.');
+  }, 16000);
+  
+  setTimeout(() => {
+    addSystemBubble('🔒 **PROTECCIÓN:** Para prevenir esto, las aplicaciones deben usar tokens CSRF, validar el origen de las solicitudes y implementar autenticación multifactor.');
+  }, 17500);
+  
+  setTimeout(() => {
+    addSystemBubble('✅ **¡DESAFÍO COMPLETADO!** Has experimentado un ataque CSRF completo. Usa el botón "Simulador" en la barra superior para regresar al modo normal.');
+  }, 19000);
+}
+
+function showChallengeResult(type, message) {
+  const result = challengeResult;
+  result.className = `challenge-result ${type}`;
+  result.textContent = message;
+  result.style.display = 'block';
+  
+  // Ocultar el resultado después de 5 segundos si es un error
+  if (type === 'error') {
+    setTimeout(() => {
+      result.style.display = 'none';
+    }, 5000);
+  }
+}
+
+function resetChallenge() {
+  challengeMode = false;
+  
+  // Restaurar la vista normal del usuario
+  document.getElementById('userNormalContent').style.display = 'block';
+  document.getElementById('userChallengeContent').style.display = 'none';
+  
+  // Mostrar elementos del atacante que estaban ocultos en modo desafío
+  const attackerElementsToShow = [
+    'captureBox',
+    'sendAttack',
+    'sendPhishing',
+    'pocBox',
+    'explainBtn',
+    'stealAmount'
+  ];
+  
+  attackerElementsToShow.forEach(elementId => {
+    const element = document.getElementById(elementId);
+    if (element) {
+      element.style.display = element.tagName === 'BUTTON' ? 'block' : 'block';
+    }
+  });
+  
+  // Restaurar las cajas de información del atacante
+  const attackerInfoBoxes = document.querySelectorAll('.attacker-card .info-box');
+  attackerInfoBoxes.forEach(box => {
+    box.style.display = 'block';
+  });
+  
+  // Restaurar headings del atacante normal
+  const attackerHeadings = document.querySelectorAll('.attacker-card h6');
+  attackerHeadings.forEach(heading => {
+    if (!heading.closest('#challengeContent')) {
+      heading.style.display = 'block';
+    }
+  });
+  
+  // Restaurar historial del usuario
+  const historialSection = document.getElementById('historialSection');
+  if (historialSection) {
+    historialSection.style.display = 'block';
+  }
+  
+  // Ocultar contenido del desafío
+  challengeContent.style.display = 'none';
+  challengePayload.value = '';
+  challengeResult.style.display = 'none';
+  
+  // Restaurar el botón de desafío
+  challengeBtn.style.display = 'block';
+  
+  // Quitar efectos visuales
+  document.querySelector('.attacker-card').classList.remove('challenge-mode');
+  document.querySelector('.user-card').classList.remove('challenge-mode');
+  
+  // Restaurar el chat al estado inicial
+  const chatContainer = document.querySelector('.chat-container');
+  chatContainer.innerHTML = '';
+  addBankBubble('¡Bienvenido a SecureBank! 🏦 Tu cuenta está protegida con nuestros mejores sistemas de seguridad.');
+  addSystemBubble('Para comenzar la simulación, realiza una transferencia legítima usando el panel izquierdo. El atacante capturará automáticamente tu solicitud.');
+}
+
+// ------- Funciones existentes -------
 explainBtn.addEventListener('click', () => {
   const modal = new bootstrap.Modal(document.getElementById('explainModal'));
   modal.show();
 });
 
 // Mensaje inicial
-addBubble('¡Bienvenido a SecureBank! 🏦 Tu cuenta está protegida con nuestros mejores sistemas de seguridad.');
+addBankBubble('¡Bienvenido a SecureBank! 🏦 Tu cuenta está protegida con nuestros mejores sistemas de seguridad.');
 addSystemBubble('Para comenzar la simulación, realiza una transferencia legítima usando el panel izquierdo. El atacante capturará automáticamente tu solicitud.');
 </script>
 </body>
