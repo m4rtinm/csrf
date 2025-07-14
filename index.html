@@ -916,7 +916,7 @@
     <div class="col-12 col-lg-4 col-xl-4 mb-3">
       <div class="card h-100 chat-card">
         <div class="card-header">
-          <i class="bi bi-chat-dots-fill me-2"></i>Chat SecuroBank
+          <i class="bi bi-chat-dots-fill me-2"></i>Chat SecureBank
         </div>
         <div class="card-body">
           <div class="chat-container" id="msgs"></div>
@@ -927,7 +927,7 @@
   </div>
 
   <footer>
-    Simulador Educativo de CSRF — SecureBank © 2025 | Este sitio es una simulación para fines educativos
+    Simulador Educativo de CSRF — SecureBank © 2025 | Area educativa de PelicanBank<br> make with ❤️ by <a href="https://www.linkedin.com/in/martin-munoz/" target="_blank" class="text-primary">Martin Muñoz</a> 
   </footer>
 </div>
 </div>
@@ -1776,7 +1776,8 @@ changePasswordBtn.addEventListener('click', () => {
   const newPassword = document.getElementById('newPassword').value;
   const confirmPassword = document.getElementById('confirmPassword').value;
   
-  if (!currentPassword || !newPassword || !confirmPassword) {
+  // En modo desafío, no requerimos la contraseña actual para mayor realismo CSRF
+  if (!newPassword || !confirmPassword) {
     addBubble('❌ Por favor completa todos los campos de contraseña.', true);
     return;
   }
@@ -1786,8 +1787,9 @@ changePasswordBtn.addEventListener('click', () => {
     return;
   }
   
-  // Capturar la solicitud solo en modo desafío
-  capturePasswordChangeRequest(currentPassword, newPassword);
+  // Capturar la solicitud solo en modo desafío (usar contraseña ficticia si no está presente)
+  const passwordForCapture = currentPassword || 'userpass123';
+  capturePasswordChangeRequest(passwordForCapture, newPassword);
   
   // Simular cambio exitoso
   addBankBubble('✅ Contraseña cambiada exitosamente. Tu cuenta está ahora más segura.');
@@ -1812,7 +1814,7 @@ Origin: https://securebank.com
 Referer: https://securebank.com/profile
 X-User-Email: ${victimEmail}
 
-current_password=${currentPassword}&new_password=${newPassword}&confirm_password=${newPassword}&user_email=${victimEmail}`;
+new_password=${newPassword}&confirm_password=${newPassword}&user_email=${victimEmail}`;
   
   // Mostrar la captura en el chat del sistema
   addSystemBubble('📡 **Solicitud capturada del usuario:** El usuario ha cambiado su contraseña. El atacante ahora puede ver la estructura de la solicitud HTTP y el email de la víctima.');
@@ -2052,19 +2054,23 @@ function startChallenge() {
     historialSection.style.display = 'none';
   }
   
+  // Ocultar el campo de contraseña actual para mayor realismo CSRF
+  const currentPasswordField = document.getElementById('currentPassword');
+  const currentPasswordLabel = currentPasswordField.parentElement;
+  if (currentPasswordField && currentPasswordLabel) {
+    currentPasswordLabel.style.display = 'none';
+  }
+  
   // Configurar el objetivo del desafío para cambio de contraseña
   challengeTarget = {
     name: 'Cambio de Contraseña',
     request: `POST /change-password HTTP/1.1
 Host: securebank.com
 Content-Type: application/x-www-form-urlencoded
-Cookie: session=user123; auth=valid
-Origin: https://securebank.com
-Referer: https://securebank.com/profile
-X-User-Email: john.doe@securebank.com
+Cookie: session=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30;
 
-current_password=userpass&new_password=newpass&confirm_password=newpass&user_email=john.doe@securebank.com`,
-    expectedFields: ['current_password', 'new_password', 'confirm_password', 'user_email'],
+new_password=newpass&confirm_password=newpass&user_email=john.doe@securebank.com`,
+    expectedFields: ['new_password', 'confirm_password', 'user_email'],
     action: '/change-password',
     method: 'POST'
   };
@@ -2336,6 +2342,13 @@ function resetChallenge() {
   const historialSection = document.getElementById('historialSection');
   if (historialSection) {
     historialSection.style.display = 'block';
+  }
+  
+  // Restaurar el campo de contraseña actual
+  const currentPasswordField = document.getElementById('currentPassword');
+  const currentPasswordLabel = currentPasswordField.parentElement;
+  if (currentPasswordField && currentPasswordLabel) {
+    currentPasswordLabel.style.display = 'block';
   }
   
   // Ocultar contenido del desafío
